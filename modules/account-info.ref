@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <reference>
+        <style>
+            account-data{
+                background-color: black;
+                border: 1px solid black;
+            }
+        </style>
+    </reference>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <reference name="account-data">
+        <div class="account-data lit flex-column align-center text-center" style="width: 25dvw;border-radius: 10px;border: 2px solid rgb(102, 70, 218);padding: 30px 10px;">
+            <h1>$name Data</h1>
+            <img src="$image" style="width: 30%;border-radius: 100%;">
+            <ul>
+                <li>$name</li>
+                <li>$id</li>
+                <li>$clientId</li>
+            </ul>
+            <button class="lit" onclick="close(this.parentElement)" style="background-color: black; width: 50%; height: 50px;border-radius: 10px;border: 2px solid rgb(102, 70, 218);">Close</button>
+        </div>
+    </reference>
+</body>
+</html>

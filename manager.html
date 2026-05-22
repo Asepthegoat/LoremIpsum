@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="modules/js.js"></script>
+    <style>
+        @keyframes pulse{
+            0%{
+                box-shadow: 0px 0px 0px 0px rgb(23, 173, 23);
+            }
+            50%{
+                box-shadow: 0px 0px 15px 0px rgb(23, 173, 23);
+            }
+            100%{
+                box-shadow: 0px 0px 0px 0px rgb(23, 173, 23);
+            }
+        }
+        @keyframes upside-down{
+            0%{
+                transform: translateY(16px);
+            }
+            0%{
+                transform: translateY(-16px);
+            }
+            0%{
+                transform: translateY(16px);
+            }
+        }
+    </style>
+    <style>
+        * {
+            color: white;
+            transition: all 0.3s ease-in;
+        }
+        body{
+            padding: 2px 5px;
+            font-family: sans-serif;
+            margin: 0;
+            background-repeat:no-repeat ;
+            background-size: cover;
+            background:
+            linear-gradient(135deg,#0f0f0f,#000000);
+        }
+        body::before{
+            position: absolute;
+            inset: 0;
+
+            backdrop-filter: blur(80px);
+        }
+        #clientData {
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 100%;
+        }
+        #clientData img {
+            border-radius: 100%;
+            border: 2px solid rgb(102, 70, 218);
+            width: 100px;
+            height: 100px;
+        }
+        #status{
+            display: flex;
+            width: 100%;
+            flex-direction: row;
+            align-items: center;
+        }
+        #connect {
+            background-color: rgb(255, 0, 0);
+            border: 2px solid rgb(224, 89, 89);
+            width: 25px;
+            border-radius: 100%;
+            height: 25px;
+        }
+        .connected {
+            animation: pulse 1s ease infinite;
+        }
+        .InvokeButton {
+            margin-top: 10px;
+            background-color: rgb(74, 36, 207);
+            border: rgb(108, 73, 236) solid 2px;
+            border-radius: 10px;
+            width: 170px;
+            height: 50px;
+            transition: all 0.3s ease-in;
+        }
+        .InvokeButton:hover{
+            background-color: rgb(97, 61, 255);
+        }
+        .InvokeButton:active{
+            transition: all 0s ease-in;
+            background-color: rgb(35, 0, 190);
+        }
+        .client{
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+            border-left: 5px rgb(19, 231, 47) solid;
+            border-start-start-radius: 5px;
+            border-end-start-radius: 5px;
+            padding: 2px 5px;
+            flex-direction: row;
+        }
+        #listclient{
+            overflow-x: none;
+            scroll-behavior: smooth;
+        }
+        .client img{
+            border-radius: 100%;
+            width: 40px;
+            height: 40px;
+        }
+        .param{
+            position: relative;
+            top:-64%;
+            height: 40px;
+            border: none;
+            border-radius: 10px;
+            justify-content: center;
+        }
+        #pstage span{
+            color: rgb(14, 111, 255);
+        }
+        #log{
+            margin-top: 50px;
+            border: 2px solid rgb(102, 70, 218);
+            border-radius: 10px;
+        }
+        #log::-webkit-scrollbar{
+            width: 10px;
+            background-color: rgba(0, 0, 0, 0);
+        }
+        #log::-webkit-scrollbar-thumb{
+            background-color: white;
+            width: 10px;
+            border-radius: 100px;
+        }
+        #main{
+            transition: 1s all ease-out;
+        }
+        .account-data h1 {
+            font-size: 27px;
+        }
+    </style>
+    <link rel="stylesheet" href="./modules/css.css">
+    <!--tagstyle-->
+    <style>
+        button{
+            cursor: pointer;
+        }
+        textarea {
+            outline: none;
+        }
+        li{
+            text-align: left;
+        }
+        footer{
+            border-bottom: 1px solid white;
+            padding: 4px;
+        }
+        .toggle-button{
+            width: 20px;
+            height: 20px;
+            border-radius: 100%;
+            margin-left: 10px;
+            background-color: green;
+            transition: 0.2s all ease-in;
+            border: 2px solid black;
+        }
+        .toggle-off{
+            background-color: rgb(211, 9, 9);
+        }
+        .set input{
+            background-color: black;
+            border-radius: 10px;
+            height: 30px;
+            margin-left: 20px;
+            outline: none;
+            border: 2px solid rgb(102, 70, 218);
+        }
+        ::selection{
+            background:rgb(68, 0, 255);
+            color: white;
+        }
+        ::-webkit-scrollbar{
+            opacity: 0;
+            width: 1px;
+        }
+    </style>
+    <link rel="icon" href="https://tr.rbxcdn.com/180DAY-45cf2dee64574c9210fac51604cdbd6a/150/150/Image/Webp/noFilter">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Manager</title>
+</head>
+<body>
+    <div id = "settings" class="hide absolute align-center justify-center max-width view flex-column" style="top: 35%;" ><div class="lit" style="background-color: #0c0c0c; width: 40dvw;border-radius: 10px;border:2px solid rgb(102, 70, 218); position: fixed; z-index: 100;">
+        <div class="text-center"><h2>SETTINGS(Not working for now)</h2></div>
+        <div class="set flex-row align-center"><p style="margin-left: 10px;">Get Client Info</p><button class="toggle-button" id="setting-cinfo"></button></div>
+        <div class="set flex-row align-center"><p style="margin-left: 10px;">Always Ping</p><button class="toggle-off toggle-button" id="setting-alwspng"></button></div>
+        <div class="set flex-row align-center"><p style="margin-left: 10px;">Auto Execute</p><button class="toggle-off toggle-button" id="setting-authexe"></button></div>
+        <div class="set flex-row align-center"><p style="margin-left: 10px;">License key</p><input id="setting-authkey" placeholder="input license here.."></div>
+    </div></div>
+    <div id="main" class="intro">
+        <div id="ads"></div>
+        <div id = "clientData" style="margin-top: 15px; position: relative;padding: 5px 5px; width: calc(100% - 12px);background-color: rgb(10, 10, 10); border: 1px solid rgb(102, 70, 218);border-radius: 10px;" class="lit shadow">
+            <img class="lit" src="https://tr.rbxcdn.com/180DAY-45cf2dee64574c9210fac51604cdbd6a/150/150/Image/Webp/noFilter" alt="user">
+            <div class = "flex-column" style="margin-left: 10px; position: relative; top: 10px;">
+                <h3 class="textlit margin-top-5" id="userName">Guest</h3>
+                <p class="textlit margin-top-5" style="position:relative;top: -0px;">ID: Free version no id required</p>
+                <div id="stats" class="margin-top-5 relative flex-row" style="gap:10px;margin-top:-15px;">
+                    <p id="count">Total Client: -</p>
+                    <p>Network Client AVG: -</p>
+                    <p>FPS Cap: default</p>
+                    <p>Limit KBPS Send: default</p>
+                    <p>Start At: <script>document.write(Date())</script></p>
+                </div>
+            </div>
+        </div>
+        <div id = "status" style="width: 100%;">
+            <div id="connect"></div>
+            <p id = "connect2" style="margin: 10px;font-size: 16px;">Disconnect</p><img id="setting" style="position:absolute; right: 20px;margin-top: 20px;width: 25px;height: 25px;" src="https://tr.rbxcdn.com/180DAY-2caeb8daedda8e7a0ceadb4396294205/420/420/Model/Webp/noFilter" onclick="settings()" />
+        </div>
+        <p>Developed by <a class = "textlit" href="https://github.com/JokoFernandes"><u><strong>Jorell</strong></u></a></p>
+        <p style="margin-top: -5px; font-size: 14px;">Get License in our <a class = "textlit" href="https://discord.gg/WmsssRkgd2" style="text-decoration:none;"><strong style="color: rgb(69, 15, 194);">Discord Server</strong></a></p>
+        
+        <div class="flex-column">
+            <div class="hide flex-column param" id="cmdparam">
+            <p style="margin: 0px; font-size: 12px;" id="pstage">Remote Name: string | Execute From: UserId(no op because this is server) | Args: ...</p>
+            </div>
+            <textarea class="lit" placeholder="Input Command Here" id="CMD" style="background-color: rgb(10, 10, 10);resize: none;height: 50dvh;padding: 10px;border: 2px rgb(102, 70, 218) solid;border-radius: 10px;"></textarea>
+            <textarea class="lit" placeholder="Enter your Web Socket url..." id="URL" value="" style="background-color: rgb(10, 10, 10);resize: none;height: 20px;padding: 10px;border: 2px rgb(102, 70, 218) solid;border-radius: 10px;"></textarea>
+            <div class="flex-row">
+                <button class = "lit InvokeButton" id="InvokeButton">Invoke All Client</button>
+                <button class = "lit InvokeButton" onclick="connect()" style="margin-left: 10px;">Connect</button>
+                <button class = "lit InvokeButton" id="closebutton" style="margin-left: 10px;">Close</button>
+            </div>
+        </div>
+        <p style="margin-bottom: -40px;font-size: 15px;">Logs:</p>
+        <div id="log" style="overflow-y: auto;height: 100px;background-color: rgb(10, 10, 10);" class="flex-column">
+            <p>-&gtcc; --Welcome--</p>
+        </div>
+        <div id="listclient" style="position: relative; top: 5px;overflow-y: auto;height: 276px;">
+        </div>
+    </div>
+    <footer class="text-center justify-center align-center" style="margin-top: -24px;">
+        <p style="color: #ffffff46;">Discord Server: <a style="color: #ffffff46;" href="https://discord.com/invite/WmsssRkgd2">Lorem Ipsum Familia</a></p>
+        <p style="color: #ffffff46;">Email: vandexventer@gmail.com</p>
+        <a href="#" style="color: #ffffff46;">Donate</a>
+        <p style="color: #ffffff46;">&copy; Lorem Ipsum Familia</p>
+    </footer>
+    <div id="reftest"></div>
+<script>
+    let clientadded = null
+    setTimeout(()=>{
+        getId("main").classList.remove("intro")
+        window.scrollTo(0,0)
+    },10)
+    let url = "" // https://xochitl-superexacting-unconcentrically.ngrok-free.dev
+    const fxxa = getId("URL")
+    let cmd = getId("CMD")
+    function getId(id){
+    return document.getElementById(id)
+    }
+    let connected = false
+    let sessionid = ""
+    function connect(){
+        if (connected){
+            return
+        }
+        url = getId("URL").value.trim()
+        console.log(url)
+        if (!url || url === "" || (!url.includes("https://") && !url.includes("http://") && !url.includes("ws://") && !url.includes("wss://"))){
+            cmd.classList.add("hide")
+            fxxa.classList.remove("hide")
+            return
+        }
+        
+        let ws = new WebSocket(url)
+        console.log(ws)
+        let statuss = getId("status")
+        let log = getId("log")
+        cmd.classList.remove("hide")
+        fxxa.classList.add("hide")
+        connected = true
+        ws.onopen = () => {
+            let s = getId("connect")
+            getId("connect2").innerText = "Connected"
+            s.style.backgroundColor = "green"
+            s.classList.add("connected")
+            s.style.border = "2px solid rgb(89, 224, 89)"
+            ws.send("%web%")
+        }
+        ws.onmessage = (message) => {
+            const dates = new Date()
+            if (message.data.includes("$Session-")){
+                let ar = message.data.split("-")
+                const sessionids = ar.slice(1).join("-")
+                sessionid = sessionids
+                console.log("pid:",sessionids,ar[1])
+                window.history.pushState({}, "", "manager.html?id=" + sessionids)
+                clientadded("Asepjuragan_fruit",sessionids,"https://tr.rbxcdn.com/180DAY-45cf2dee64574c9210fac51604cdbd6a/150/150/Image/Webp/noFilter")
+            }
+            log.innerHTML += `<p class="margin-top-5">\[${dates}\]: ${message.data}</p>`
+        }
+        ws.onclose = () => {
+            url = ""
+            getId("URL").value = ""
+            try {
+                getId("WebApp").remove()
+            } catch(err) {
+                console.warn("No Connection")
+            }
+            connected = false
+            let s = getId("connect")
+            getId("connect2").innerText = "Disconnect"
+            s.style.backgroundColor = "rgb(255, 0, 0)"
+            s.classList.remove("connected")
+            s.style.border = "2px solid rgb(224, 89, 89)"
+        }
+        function invoke(){
+            let CMD = getId("CMD").value
+            if (CMD === "" || !CMD){
+                return
+            }
+            let command = CMD.split(" ")
+            if (command[1] === "" || Number(command[1]) === 0){
+                command[1] = "@WebApp"
+            }
+            let result = {
+                name: command[0],
+                id: command[1],
+                opr:"@all",
+                args:command.slice(2).join(" ").split(",")
+            }
+
+            console.log(result)
+            ws.send(JSON.stringify(result))
+        }
+        function closesocket() {
+            ws.close()
+        }
+        getId("InvokeButton").onclick = () => {
+            invoke()
+        }
+        getId("closebutton").onclick = () => {
+            closesocket()
+        }
+        setInterval(()=>{
+            ws.send("ping")
+        },60000)
+        return ws
+    }
+    let activews = connect()
+    
+</script>
+<!--UI UX-->
+<script>
+    function paramshow(level){ //i cant use regex ♔
+        let varskid = getId("param")
+        let stage = getId("pstage")
+        if (level === 1){
+            stage.innerHTML = `<p style="margin: 0px; font-size: 12px;" id="pstage"><span>Remote Name: string </span> | Execute From: UserId(no op because this is server) | Args: ...</p>`
+        }
+        else if (level === 2){
+            stage.innerHTML = `<p style="margin: 0px; font-size: 12px;" id="pstage">Remote Name: string |<span> Execute From: UserId(no op because this is server) </span>| Args: ...</p>`
+        } 
+        else{
+            stage.innerHTML = `<p style="margin: 0px; font-size: 12px;" id="pstage">Remote Name: string | Execute From: UserId(no op because this is server)| <span> Args: ... </span></p>`
+        } 
+    }
+    function getLine() {
+        let textarea = getId("CMD")
+        let pos = textarea.selectionStart
+
+        let textBeforeCursor = textarea.value.substring(0, pos)
+
+        let line = textBeforeCursor.split("\n").length
+
+        return line
+    }
+    let paramcmd = getId("cmdparam")
+    cmd.addEventListener("input",()=>{
+        const val = cmd.value.split(" ")
+        paramcmd.classList.remove("hide")
+        let upvl = val.length
+        paramshow(upvl)
+        let line = getLine()
+    })
+    cmd.addEventListener("blur", ()=>{
+        paramcmd.classList.add("hide")
+    })
+
+    //settings stuff
+    document.querySelectorAll(".toggle-button").forEach(el => {
+        el.addEventListener("click",() =>{
+            el.classList.toggle("toggle-off")
+        })
+    });
+    function settings(){
+            getId("settings").classList.toggle("hide")
+        }
+</script>
+<script>
+    const listclient = getId("listclient")
+    function accountInfo(data){
+        fetch(data).then(res => res.json()).then(dat =>{
+            genv.name = dat.name
+            genv.image = dat.image
+            genv.id = dat.id
+            genv.clientId = dat.clientId
+            genv.network = dat.network
+            genv.online = dat.online
+            genv.game = dat.game
+            getId("reftest").GetReference = ["modules/account-info.ref"] //load reference
+        })
+    }
+    clientadded = function(name,sid,image){
+        listclient.innerHTML += `<div class="client" onclick ="accountInfo()" style="background:linear-gradient(90deg,#1b007e 0%,#14016888 8%,#02014833 35%,#00000000 60%);" id="WebApp">
+                <img src="${image}" style="border: solid 2px #424fff;" alt="">
+                <div style="display: flex;flex-direction: column;margin-left: 4px;" class="userdataname">
+                    <p style="font-size: 15px;margin-top: 12px;color: rgb(91, 255, 86);">${name}</p>
+                    <p style="font-size: 12px;margin-top: -10px;color: rgb(224, 224, 105);font-weight: 600;">Session Id: ${sid}</p>
+                </div>
+            </div>`
+    }
+
+</script>
+</body>
+</html>

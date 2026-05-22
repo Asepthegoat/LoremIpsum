@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get Started</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+body{
+    width:100%;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#070018;
+    overflow:hidden;
+    position:relative;
+}
+.circle{
+    position:absolute;
+    border-radius:50%;
+    background:rgba(163, 93, 255, 0.158);
+    transition: 5s all ease-out;
+}
+.circle1{
+    width:150px;
+    height:150px;
+    bottom:-100px;
+    right:-100px;
+}
+.circle2{
+    width:100px;
+    height:100px;
+    bottom:-50px;
+    right:-50px;
+}
+.circle3{
+    width:50px;
+    height:50px;
+    bottom:-200px;
+    right:-2000px;
+}
+.line{
+    position:absolute;
+    width:101%;
+    height:2px;
+    background:rgba(143, 24, 255, 0.342);
+}
+.line1{
+    top:25%;
+}
+.line2{
+    top:75%;
+}
+.container{
+    text-align:center;
+    z-index:2;
+}
+@keyframes intro {
+    0%{
+        top: 100px;
+        opacity: 0;
+    }
+    50%{
+        opacity: 0;
+    }
+    100%{
+        top: 0px;
+        opacity: 1;
+    }
+}
+h1{
+    color:white;
+    font-size:60px;
+    margin-bottom:15px;
+    transition: all 0.5s ease;
+    position: relative;
+    animation: ease-out 1.2s intro;
+}
+p{
+    color:rgba(255,255,255,0.6);
+    margin-bottom:25px;
+    font-size:15px;
+    position: relative;
+    animation: ease-out 1.2s intro;
+}
+button{
+    width:200px;
+    height:55px;
+    position: relative;
+    border:none;
+    border-radius:12px;
+    background:rgb(93, 18, 233);
+    border: 2px solid rgb(127, 48, 255);
+    color:black;
+    font-size:18px;
+    cursor:pointer;
+    transition:0.2s;
+    animation: ease-out 1.2s intro;
+}
+button:hover{
+    opacity:0.8;
+}
+.hide{
+    display: none;
+}
+</style>
+</head>
+<body>
+    <div class="circle circle1"></div>
+    <div class="circle circle2"></div>
+    <div class="circle circle1"></div>
+    <div class="circle circle2"></div>
+    <div class="circle circle1"></div>
+    <div class="circle circle2"></div>
+    <div class="circle circle2"></div>
+    <div class="circle circle2"></div>
+    <div class="circle circle3"></div>
+    <div class="circle circle3"></div>
+    <div class="circle circle3"></div>
+    <div class="circle circle3"></div>
+    <div class="circle circle3"></div>
+    <div class="circle circle3"></div>
+    
+
+    <div class="line line1"></div>
+    <div class="line line2"></div>
+    <div class="container" id="con1">
+        <h1>Welcome</h1>
+        <p>LIEX Orchestrator Multi Client Control</p>
+        <button id="start" style="color: white;">Get Started</button>
+    </div>
+    <div class="container hide" id="con2">
+        <h1>Get Started</h1>
+        <p>LIEX Control all of your alt only with single line of code</p>
+        <button style="color: white;" class="linked" link="manager.html">LIEX Orchestrator</button>
+        <button style="color: white;margin-left: 10px;" class="linked" link="download.html">Download Package</button>
+        <button style="color: white;margin-left: 10px;" class="linked" link="#doc">Documentation</button>
+    </div>
+
+    <script>
+        document.querySelectorAll(".linked").forEach(data => {
+            console.log(data.getAttribute("link "))
+            data.onclick = () => {window.location.href = data.getAttribute("link")}
+        })
+        document.getElementById("start").onclick = function(){
+            document.getElementById("con1").classList.add("hide")
+            document.getElementById("con2").classList.remove("hide")
+            document.getElementById("con2").classList.add("in")
+        }
+        document.querySelectorAll(".circle").forEach(self =>{
+
+            self.style.left = Math.floor(Math.random() * 90) + "%"
+            self.style.top = Math.floor(Math.random() * 70) + "%"
+        })
+        setTimeout(()=>{
+            document.querySelectorAll(".circle").forEach(self =>{
+
+            self.style.left = Math.floor(Math.random() * 90) + "%"
+            self.style.top = Math.floor(Math.random() * 70) + "%"
+        })
+        },500)
+        let time = 0.07
+        document.querySelectorAll(".circle").forEach(self =>{
+            
+            setTimeout(() => {
+                setInterval(()=>{
+                    self.style.left = Math.floor(Math.random() * 90) + "%"
+                    self.style.top = Math.floor(Math.random() * 90) + "%"
+                },4500)
+            }, time * 1000);
+            time += 0.4
+        })
+    </script>
+</body>
+</html>
