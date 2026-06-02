@@ -6,14 +6,14 @@
 ░█▀█░█▀▄░█▀▀░█░█░█▀▀░█▀▀░▀█▀░█▀▄░█▀█░▀█▀░█▀█░█▀▄
 ░█░█░█▀▄░█░░░█▀█░█▀▀░▀▀█░░█░░█▀▄░█▀█░░█░░█░█░█▀▄
 ░▀▀▀░▀░▀░▀▀▀░▀░▀░▀▀▀░▀▀▀░░▀░░▀░▀░▀░▀░░▀░░▀▀▀░▀░▀
-
-Beta 0.1
+36d2d2f6-bc27-40b7-84dd-28e4771a07c6
+Beta 0.433.2
 ]]
-
 
 if getgenv().RemoteSocket.Status == true then
     return warn("Socket is already exist close it first by using:\nSocket:CloseSession()")
 end
+
 getgenv().RemoteSocket.Status = true
 --------------------------------------------------------------------
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Asepthegoat/LIUDEX-Z/refs/heads/main/script/tools/functions.lua"))() --LIB DON'T REMOVE THIS
@@ -141,7 +141,7 @@ sockets.OnMessage:Connect(function(msg)
         print("Connected")
     end
     print("recive",msg)
-    if msg == "|ConnectedToSocket|" then
+    if msg == "|ConnectedToSocket|" or msg == "__web__" then
         return
     end
     if msg == "%GetUserData%" then
@@ -158,7 +158,7 @@ sockets.OnMessage:Connect(function(msg)
     local name = args['name']
     local id = args['id']
     local op = args['opr']
-    if op == "@Manager" then
+    if op:lower() == "@manager" or not op or op:lower() == "@socket" then
         return
     end
     local func =  RemoteSocket.RemoteCom[name].func or RemoteSocket.RemoteCom["entry"].func
@@ -167,9 +167,6 @@ sockets.OnMessage:Connect(function(msg)
             print("converted:",v:match("%$(%S+)"))
             args.args[i] = findPlayer(v:match("%$(%S+)")).Name
         end
-    end
-    if op:lower() == "@manager" then
-        return
     end
     local serverdata = args['opr']:split(";")
     local job = serverdata['opr']
@@ -206,6 +203,12 @@ end)
 
 function Socket:CloseSession()
     sockets:Close()
+    for i,v in next,getnilinstances() do
+        if v.className == "WebSocketClient" then
+            v:Close()
+        end
+    end
+    task.wait()
     getgenv().RemoteSocket = nil
     warn("Clossed")
 end
@@ -248,6 +251,8 @@ function Socket:FireSocket(op,...)
 end
 ]]
 
+
+
 function Socket:FireSocket(op,...)
     local args = {...}
     for i,v in pairs(args) do
@@ -268,15 +273,16 @@ function Socket:FireSocket(op,...)
 end
 task.spawn(function()
     while true do
-        task.wait(180)
-        local value = {name= "ping",id=tostring(RemoteSocket.ClientId),opr="@Manager",args={
+        task.wait(30)
+        local value = {name= "__Heartbeat__",id=tostring(RemoteSocket.ClientId),opr="@Socket",invoke = true,args={
+            who = getplayer().name,
             ping = math.floor(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue() * 100) / 100,
             mem = math.floor(game:GetService("Stats").PerformanceStats.Memory:GetValue() * 100) / 100,
             gpu = math.floor(game:GetService("Stats").PerformanceStats.CPU:GetValue() * 100) / 100,
             fps = math.floor(game:GetService("Stats").FrameRateManager.AverageFPS:GetValueString() * 100) / 100
         }
         }
-        sockets:Send(HttpService:JSONEncode(value))
+        pcall(function() sockets:Send(HttpService:JSONEncode(value)) end)
     end
 end)
 Socket.FireServer = Socket.FireSocket
@@ -319,11 +325,7 @@ function Socket:FormatBring(target)
 end
 
 function Socket:GetSockets()
-    local s = {}
-    for i,v in pairs(RemoteSocket.RemoteCom) do
-        table.insert(s,v)
-    end
-    return s
+    return RemoteSocket.RemoteCom
 end
 
 --stetup starter socket dont remove
@@ -332,7 +334,7 @@ local say = Socket.new("say",function(...)
 end)
 
 --require entry dont change annything here
-local entry = Socket.new("entry",function(id,...) --do not remove this one it used to avoid double socket connection but you can change the function inside
+local entry = Socket.new("__Entry__",function(id,...) --do not remove this one it used to avoid double socket connection but you can change the function inside
     print(id,"Has Join this session")
 end)
 
@@ -392,21 +394,23 @@ getgenv().chat = Socket.new("chat",function(id,...)
     fakeChat(sender or "@WebApp",table.concat(args," ",1))
 end)
 
-getgenv().
-
-entry:FireSocket("@Manager",getplayer().Name,tostring(getsessionid()))
+task.wait()
+local profile = "https://www.roblox.com/users/" .. tostring(getplayer().UserId) .. "/profile"
+entry:FireSocket("@Manager",getdeviceid(),tostring(getsessionid()),tostring(game.PlaceId),game.JobId,profile,getplayer().Name)
 
 --[[
 you must format your data if straming mode enabled 
 ]]
 
-getgenv().bring = Socket.new("bring",function(id,target,straming)
-    if straming then 
+getgenv().bring = Socket.new("bring",function(id,target,streaming)
+    if streaming then 
         target = HttpService:JSONDecode(target)
         if typeof(target) ~= "table" then
-            return error("target must be a table if you enable straming mode bring")
+            return error("target must be a table if you enable streaming mode bring \nmake sure to Encode data while firing Remote")
         end
-        
+        target.x = target.x or target[1]
+        target.y = target.y or target[2]
+        target.z = target.z or target[3]
         getrootpart().CFrame = CFrame.new(target.x,target.y,target.z)
         return
     end
@@ -453,10 +457,48 @@ getgenv().ldxhopto = Socket.new("hopto", function(id,goal,place,jobid)
         import.TeleportService:TeleportToPlaceInstance(tonumber(place),jobid,getplayer())
     end
 end)
-
-getgenv().getwssenv = Socket.new("getwssenv",function(id,...)
-    return {...}
+local vim = import.VirtualInputManager
+getgenv().sync = {}
+getgenv().sync.movement = Socket.new("syncmove",function(id,type,data)
+    data = HttpService:JSONDecode(data)
+    if type == "keyboard" then
+        vim:SendKeyEvent(data.updwn,data.enum,false,game)
+    elseif type == "mousebutton" then
+        vim:SendMouseButtonEvent(data.x,data.y,data.enum,data.updwn,game)
+    elseif type == "mousedeltamove" then
+        vim:SendMouseDeltaEvent(data.x,data.y,game)
+    elseif type == "acelerometer" then
+        vim:SendAccelerometerEvent(data.x or 0,data.y or 0,data.z or 0)
+    elseif type == "camera" then
+        workspace.Camera.CFrame = data.CFrame
+    end
 end)
+
+getgenv().sync.code = Socket.new("synccode",function(id,code) --this use to visualize in all client
+    local p = Players:GetPlayerByUserId(id)
+    code = code:gsub(".LocalPlayer","['".. p.name .. "']"):gsub("getplayer()","getplayer(" .. id .. ")")
+    loadstring(code)()
+end)
+
+getgenv().pasteclipboard = Socket.new("pasteclipboard",function(id,...) --used for paste text from manager or other client in client input
+    local args = {...}
+    vim:SendTextInputCharacterEvent(table.concat(args," "),game)
+end)
+getgenv().wsenv = {}
+local envsocket = Socket.new("__Shared__",function(id,...)
+    getgenv().wsenv = ...
+end)
+
+getgenv().getwsenv = setmetatable({}, {
+    __newindex = function(self, key, value)
+        print(self,key, value)
+        senv[key] = value
+        envsocket:FireSocket("POST",key,value)
+    end,
+    __index = function(self,key)
+        envsocket:FireSocket("GET",key)
+    end
+})
 
 return sockets
 --bring:FireSocket("@all",import.HttpService:JSONEncode({x = -172.8151397705078,y = 3.226611852645874,z = -16.3127498626709}),"true")
