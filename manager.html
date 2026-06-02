@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7360330887646500" crossorigin="anonymous"></script>
     <script src="modules/js.js"></script>
-    <meta name="google-adsense-account" content="ca-pub-7360330887646500">
     <style>
         @keyframes pulse{
             0%{
@@ -12,6 +12,7 @@
                 box-shadow: 0px 0px 15px 0px rgb(23, 173, 23);
             }
             100%{
+            
                 box-shadow: 0px 0px 0px 0px rgb(23, 173, 23);
             }
         }
@@ -31,6 +32,8 @@
         * {
             color: white;
             transition: all 0.3s ease-in;
+            -webkit-tap-highlight-color: transparent;
+            scrollbar-highlight-color: white;
         }
         body{
             padding: 2px 5px;
@@ -138,6 +141,11 @@
         #main{
             transition: 1s all ease-out;
         }
+        .account-data{
+            background-color: black;
+            border: 1px solid black;
+            left: calc(50dvw - 160px);
+        }
         .account-data h1 {
             font-size: 27px;
         }
@@ -198,8 +206,20 @@
         <div class="set flex-row align-center"><p style="margin-left: 10px;">Get Client Info</p><button class="toggle-button" id="setting-cinfo"></button></div>
         <div class="set flex-row align-center"><p style="margin-left: 10px;">Always Ping</p><button class="toggle-off toggle-button" id="setting-alwspng"></button></div>
         <div class="set flex-row align-center"><p style="margin-left: 10px;">Auto Execute</p><button class="toggle-off toggle-button" id="setting-authexe"></button></div>
-        <div class="set flex-row align-center"><p style="margin-left: 10px;">License key</p><input id="setting-authkey" placeholder="input license here.."></div>
+        <div class="set flex-row align-center"><p style="margin-left: 10px;">Script</p><input id="setting-authkey" placeholder="Auto Execute Script.."></div>
     </div></div>
+    <div id="advertical" class="absolute">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7360330887646500" crossorigin="anonymous"></script>
+<!-- advertical -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7360330887646500"
+     data-ad-slot="1171096531"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
     <div id="main" class="intro">
         <div id="ads"></div>
         <div id = "clientData" style="margin-top: 15px; position: relative;padding: 5px 5px; width: calc(100% - 12px);background-color: rgb(10, 10, 10); border: 1px solid rgb(102, 70, 218);border-radius: 10px;" class="lit shadow">
@@ -233,14 +253,20 @@
                 <button class = "lit InvokeButton" id="InvokeButton">Invoke All Client</button>
                 <button class = "lit InvokeButton" onclick="connect()" style="margin-left: 10px;">Connect</button>
                 <button class = "lit InvokeButton" id="closebutton" style="margin-left: 10px;">Close</button>
+                <button class = "lit InvokeButton" id = "executiontype" onclick="globalexecute()" style="margin-left: 10px;">Global Execute</button>
+                <button class = "lit InvokeButton" id = "savescript" onclick="savescript()" style="margin-left: 10px;">Save Script</button>
+                <button class = "lit InvokeButton" id = "script" onclick="document.getElementById('scriptfile').click()" style="margin-left: 10px;">Select Script</button>
+                <input type="file" id="scriptfile" accept=".lua,.luau,.txt,.ldx,.text,.rbxmx" hidden>
             </div>
         </div>
         <p style="margin-bottom: -40px;font-size: 15px;">Logs:</p>
         <div id="log" style="overflow-y: auto;height: 100px;background-color: rgb(10, 10, 10);" class="flex-column">
             <p>-&gtcc; --Welcome--</p>
         </div>
+        <button class = "lit InvokeButton" onclick="clearlogs()" style="margin-left: 10px;width:100px;height: 40px;">Clear logs</button>
         <div id="listclient" style="position: relative; top: 5px;overflow-y: auto;height: 276px;">
         </div>
+        <div id="reftest" absolute align-center justify-center max-width view flex-column" style="top: 35%;"></div>
     </div>
     <footer class="text-center justify-center align-center" style="margin-top: -24px;">
         <p style="color: #ffffff46;">Discord Server: <a style="color: #ffffff46;" href="https://discord.com/invite/WmsssRkgd2">Lorem Ipsum Familia</a></p>
@@ -248,9 +274,9 @@
         <a href="#" style="color: #ffffff46;">Donate</a>
         <p style="color: #ffffff46;">&copy; Lorem Ipsum Familia</p>
     </footer>
-    <div id="reftest"></div>
+    
 <script>
-    let clientadded = null
+    let clients = {}
     setTimeout(()=>{
         getId("main").classList.remove("intro")
         window.scrollTo(0,0)
@@ -258,11 +284,14 @@
     let url = "" // https://xochitl-superexacting-unconcentrically.ngrok-free.dev
     const fxxa = getId("URL")
     let cmd = getId("CMD")
+    let clientadded;
+    let clientremoving;
     function getId(id){
     return document.getElementById(id)
     }
     let connected = false
     let sessionid = ""
+    let globexecutor = false
     function connect(){
         if (connected){
             return
@@ -288,17 +317,45 @@
             s.style.backgroundColor = "green"
             s.classList.add("connected")
             s.style.border = "2px solid rgb(89, 224, 89)"
-            ws.send("%web%")
+            ws.send("__web__")
         }
         ws.onmessage = (message) => {
-            const dates = new Date()
+            const dates = new Date().toString().replace(/ GMT.*$/, "");
+
             if (message.data.includes("$Session-")){
                 let ar = message.data.split("-")
                 const sessionids = ar.slice(1).join("-")
                 sessionid = sessionids
                 console.log("pid:",sessionids,ar[1])
                 window.history.pushState({}, "", "manager.html?id=" + sessionids)
-                clientadded("Asepjuragan_fruit",sessionids,"https://tr.rbxcdn.com/180DAY-45cf2dee64574c9210fac51604cdbd6a/150/150/Image/Webp/noFilter")
+                clientadded("I Love Clorinde",sessionids,"https://tr.rbxcdn.com/180DAY-45cf2dee64574c9210fac51604cdbd6a/150/150/Image/Webp/noFilter",[navigator.userAgent])
+            }
+            let dataws = message.data
+            let filtering = false
+            try{
+                dataws = JSON.parse(message.data)
+                if (dataws.opr === "@Socket" || dataws.name === "__USERDATA__") {
+                    filtering = true
+                }
+                if (dataws.name === "__USERDATA__" && dataws.opr === "@Manager") {
+                    clients = dataws.data
+                    console.log(clients)
+                }
+                if (dataws.name === "__Client__" && dataws.opr === "@Manager") {
+                    const dataa = dataws.data
+                    if (dataws.id === "Added") {
+                        console.log("added",dataa)
+                        clientadded(dataa.Name,dataa.SessionId,dataa.Profile,["Player"])
+                        
+                    }
+                    else if (dataws.id === "Removing") {
+                        console.log("remove",dataws.args[0])
+                        clientremoving(dataws.args[0])
+                    }
+                }
+            } catch(err){}
+            if (filtering){
+                return
             }
             log.innerHTML += `<p class="margin-top-5">\[${dates}\]: ${message.data}</p>`
         }
@@ -317,9 +374,20 @@
             s.classList.remove("connected")
             s.style.border = "2px solid rgb(224, 89, 89)"
         }
+        
         function invoke(){
             let CMD = getId("CMD").value
             if (CMD === "" || !CMD){
+                return
+            }
+            if (globexecutor) {
+                let result = {
+                    name: "code",
+                    id: 0,
+                    opr:"@all",
+                    args:[CMD]
+                }
+                ws.send(JSON.stringify(result))
                 return
             }
             let command = CMD.split(" ")
@@ -330,7 +398,7 @@
                 name: command[0],
                 id: command[1],
                 opr:"@all",
-                args:command.slice(2).join(" ").split(",")
+                args:command.slice(2).join(" ").match(/".+?"|[^,]+/g)?.map(v => v.trim().replace(/^"|"$/g, ""))
             }
 
             console.log(result)
@@ -346,8 +414,8 @@
             closesocket()
         }
         setInterval(()=>{
-            ws.send("ping")
-        },60000)
+            ws.send(JSON.stringify({name: "__GetData__",opr: "@Socket",invoke:true}))
+        },10 * 1000)
         return ws
     }
     let activews = connect()
@@ -355,6 +423,20 @@
 </script>
 <!--UI UX-->
 <script>
+    function globalexecute(){
+        globexecutor = !globexecutor
+        const exxxxx = getId("executiontype")
+        const invkbtn = getId("InvokeButton")
+        if (globexecutor) {
+            exxxxx.style.backgroundColor = "rgb(36, 170, 74)"
+            invkbtn.textContent = "Execute"
+        }
+        else{
+            exxxxx.style.backgroundColor = "rgb(74, 36, 207)"
+            invkbtn.textContent = "Invoke All Client"
+        }
+        console.log(globexecutor)
+    }
     function paramshow(level){ //i cant use regex ♔
         let varskid = getId("param")
         let stage = getId("pstage")
@@ -389,7 +471,6 @@
     cmd.addEventListener("blur", ()=>{
         paramcmd.classList.add("hide")
     })
-
     //settings stuff
     document.querySelectorAll(".toggle-button").forEach(el => {
         el.addEventListener("click",() =>{
@@ -399,31 +480,99 @@
     function settings(){
             getId("settings").classList.toggle("hide")
         }
+    let settingFeature = {
+        SendNotification:false,
+        GetClietData:true,
+        AlwaysPing:false,
+        AutoExe:false
+    }
+    function updSetting(set){
+        settingFeature[set] = !settingFeature[set]
+        SelectAll("set").forEach(sets =>{
+            if (settingFeature[set]) {
+                sets.classList.remove("toggle-off")
+            }
+            else{
+                sets.classList.add("toggle-off")
+            }
+        })
+    }
+    function clearlogs(){
+        getId("log").innerHTML = "<p>-&gtcc; --Welcome--</p>"
+    }
+</script>
+<!--others-->
+<script>
+async function savescript() {
+    const handle = await window.showSaveFilePicker({
+        suggestedName: "myscript.lua",
+        types: [{
+            description: "Text File",
+            accept: {
+                "text/plain": [".txt",".lua",".luau"]
+            }
+        }]
+    })
+    const writable = await handle.createWritable()
+    await writable.write(getId("CMD").value)
+    await writable.close()
+}
 </script>
 <script>
     const listclient = getId("listclient")
-    function accountInfo(data){
-        fetch(data).then(res => res.json()).then(dat =>{
-            genv.name = dat.name
-            genv.image = dat.image
-            genv.id = dat.id
-            genv.clientId = dat.clientId
-            genv.network = dat.network
-            genv.online = dat.online
-            genv.game = dat.game
-            getId("reftest").GetReference = ["modules/account-info.ref"] //load reference
-        })
+    let cdatas = {}
+    
+    function accountInfo(data,tbl){
+        tbl = cdatas[data]
+        data = cdatas[data].stat
+            genv.name = data[0]
+            genv.image = data[1]
+            genv.id = data[2]
+            genv.clientId = data[3] || tbl.data
+            genv.network = data[4]
+            genv.online = data[5]
+            genv.game = data[6]
+            console.log(tbl)
+            setTimeout(() => {
+                getId("reftest").GetReference = "./modules/account-info.ref" //load reference
+            }, 100);
     }
-    clientadded = function(name,sid,image){
-        listclient.innerHTML += `<div class="client" onclick ="accountInfo()" style="background:linear-gradient(90deg,#1b007e 0%,#14016888 8%,#02014833 35%,#00000000 60%);" id="WebApp">
-                <img src="${image}" style="border: solid 2px #424fff;" alt="">
+    let strval = "0"
+    clientadded = function(name,sid,image,customdata){
+        const g = document.createElement("div")
+        g.classList.add = "client"
+        g.setAttribute("name",name)
+        listclient.appendChild(g)
+        g.innerHTML += `<div class="client" onclick ="accountInfo('${name}')" style="background:linear-gradient(90deg,#1b007e 0%,#14016888 8%,#02014833 35%,#00000000 60%);" id="WebApp">
+                <img src="${image}" style="border: solid 2px #424fff;" alt="" onclick="getdata(${Number(strval)})">
                 <div style="display: flex;flex-direction: column;margin-left: 4px;" class="userdataname">
                     <p style="font-size: 15px;margin-top: 12px;color: rgb(91, 255, 86);">${name}</p>
                     <p style="font-size: 12px;margin-top: -10px;color: rgb(224, 224, 105);font-weight: 600;">Session Id: ${sid}</p>
+                    <ldxdata></ldxdata>
                 </div>
             </div>`
+        cdatas[name] = {stat:[name,image,sid],data:[customdata]}
+        console.log(cdatas)
     }
-
+    clientremoving = function(name){
+        console.log("sucremove")
+        document.querySelector("div[name='"+name+"']").remove()
+    }
+    function closepanel(el){
+        el.remove()
+    }
+    function copyusrdat(el){
+        let a = "{"
+        el.querySelectorAll("li").forEach(udat => {
+            a += udat.textContent + ", "
+        })
+        a += "}"
+        navigator.clipboard.writeText(a)
+        el.querySelector(".close").style.backgroundColor = "rgba(170, 170, 170, 0.181)"
+        setTimeout(() => {
+            el.querySelector(".close").style.backgroundColor = "rgba(0,0,0,1)"
+        }, 1 * 300);
+    }
 </script>
 </body>
 </html>
