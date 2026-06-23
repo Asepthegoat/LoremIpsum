@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyCalistung - Aplikasi Belajar Baca, Tulis & Hitung Anak</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+body { background:#FFF9F0; color:#1a1a2e; }
+
+/* ===== HEADER ===== */
+header {
+  width:100%; padding:16px 5%;
+  display:flex; justify-content:space-between; align-items:center;
+  background:#fff;
+  border-bottom: 3px solid #FFE066;
+}
+.logo { display:flex; align-items:center; gap:10px; }
+.logo span { font-size:20px; font-weight:800; background: linear-gradient(90deg,#FF6B6B,#FF8E53,#FFD93D,#6BCB77,#4D96FF); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.logo-icon { font-size:28px; background: none !important; }
+.btn-top {
+  padding:10px 22px; color:#fff; border-radius:30px;
+  font-size:13px; font-weight:700; text-decoration:none;
+  background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+  box-shadow: 0 4px 12px rgba(255,107,107,0.35);
+}
+
+/* ===== HERO ===== */
+.hero {
+  padding:60px 5% 70px;
+  display:flex; align-items:center; justify-content:center;
+  gap:40px; position:relative; flex-wrap:wrap;
+  background: linear-gradient(160deg, #FFF0FB 0%, #FFF9E6 40%, #F0F8FF 100%);
+  overflow:hidden;
+}
+.hero::before {
+  content:''; position:absolute; top:-60px; right:-60px;
+  width:300px; height:300px; border-radius:50%;
+  background:rgba(255,217,61,0.15);
+}
+.hero::after {
+  content:''; position:absolute; bottom:-80px; left:-60px;
+  width:250px; height:250px; border-radius:50%;
+  background:rgba(107,203,119,0.12);
+}
+.hero-text { flex:1 1 400px; max-width:550px; text-align:center; position:relative; z-index:1; }
+.badge {
+  display:inline-flex; align-items:center; gap:8px;
+  background:#FFE066; padding:6px 16px; border-radius:30px;
+  font-size:12px; margin-bottom:20px; color:#7a5a00; font-weight:700;
+  border:2px solid #FFD700; box-shadow:0 2px 8px rgba(255,215,0,0.3);
+}
+.hero h1 { font-size:3rem; line-height:1.2; margin-bottom:18px; font-weight:900; color:#1a1a2e; }
+.hero h1 .c1 { color:#FF6B6B; }
+.hero h1 .c2 { color:#4D96FF; }
+.hero h1 .c3 { color:#6BCB77; }
+.hero h1 .c4 { color:#FFD93D; -webkit-text-stroke:1px #F0A500; }
+.desc { font-size:1.05rem; color:#555; margin-bottom:30px; line-height:1.7; }
+.desc2 { font-size:0.78rem; color:#888; padding-top:18px; line-height:1.6; font-style:italic; }
+.hero-buttons { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-bottom:6px; }
+.btn-primary {
+  padding:14px 28px; color:#fff; border-radius:16px;
+  font-weight:700; text-decoration:none; font-size:15px;
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+  box-shadow:0 6px 20px rgba(255,107,107,0.4);
+  display:inline-block; transition:transform 0.2s;
+}
+.btn-primary:hover { transform:translateY(-2px); }
+.hero-img {
+  flex:1 1 300px; min-width:240px; position:relative;
+  display:flex; justify-content:center; align-items:center;
+  z-index:1;
+}
+.hero-card {
+  width:100%; max-width:310px; padding:24px; background:#fff;
+  border-radius:28px;
+  border:3px solid #FFE066;
+  box-shadow:8px 8px 0px #FFD700;
+  text-align:center; position:relative; z-index:1;
+}
+.floating-icon { position:absolute; width:52px; animation:float 4s ease-in-out infinite; filter:drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
+@keyframes float { 0%,100%{transform:translateY(0) rotate(-5deg);} 50%{transform:translateY(-12px) rotate(5deg);} }
+
+@media(max-width:768px){
+  .hero{ flex-direction:column; padding:40px 5% 50px; }
+  .hero h1{ font-size:2.4rem; }
+  .desc{ font-size:0.95rem; }
+  .hero-img{ margin-top:30px; }
+}
+@media(max-width:480px){ .hero h1{font-size:2rem;} }
+
+/* ===== DIVIDER WAVE ===== */
+.wave-divider { width:100%; overflow:hidden; line-height:0; }
+.wave-divider svg { display:block; width:100%; }
+
+/* ===== SECTION WRAPPER ===== */
+.section-wrapper { max-width:780px; margin:auto; padding:50px 28px; }
+.section-title { text-align:center; font-size:1.9rem; font-weight:800; color:#1a1a2e; margin-bottom:10px; }
+.subtitle { text-align:center; font-size:0.95rem; color:#666; margin-bottom:28px; }
+
+/* ===== PROBLEM CARDS ===== */
+.problem-card {
+  padding:18px 20px; border-radius:20px; display:flex;
+  align-items:center; gap:16px; margin-bottom:14px;
+  border-width:2px; border-style:solid;
+}
+.problem-card.pc-red    { background:#FFF0F0; border-color:#FFB3B3; }
+.problem-card.pc-blue   { background:#F0F6FF; border-color:#B3D4FF; }
+.problem-card.pc-yellow { background:#FFFBEA; border-color:#FFE566; }
+.problem-card.pc-purple { background:#F5F0FF; border-color:#C9B8FF; }
+.problem-icon {
+  width:54px; height:54px; border-radius:16px; flex-shrink:0;
+  display:flex; justify-content:center; align-items:center; font-size:28px;
+}
+.pi-red    { background:#FFD6D6; }
+.pi-blue   { background:#D6E9FF; }
+.pi-yellow { background:#FFF3B0; }
+.pi-purple { background:#E5D6FF; }
+.problem-text-title { font-size:1rem; font-weight:700; color:#1a1a2e; margin-bottom:3px; }
+.problem-text-sub { font-size:0.83rem; color:#6b7280; }
+
+/* ===== SOLUTION SECTION ===== */
+.solution-wrapper {
+  background: linear-gradient(135deg, #FFF0F5 0%, #E8F4FF 100%);
+  padding:55px 0 55px 28px;
+}
+.solution-inner { max-width:780px; margin:auto; }
+.solution-box { text-align:center; padding-right:28px; margin-bottom:35px; }
+.solution-title { font-size:1.9rem; font-weight:900; color:#1a1a2e; }
+.solution-title .hl { color:#FF6B6B; }
+.solution-sub { font-size:0.95rem; color:#555; margin-top:8px; }
+
+.solution-cards {
+  display:flex; gap:16px; overflow-x:auto; padding-bottom:12px;
+  scrollbar-width:none; cursor:grab; user-select:none;
+}
+.solution-cards:active{ cursor:grabbing; }
+.solution-cards::-webkit-scrollbar{ display:none; }
+
+.solution-card {
+  min-width:230px; max-width:230px; padding:22px 18px; border-radius:22px;
+  text-align:center; flex-shrink:0; display:flex; flex-direction:column;
+  align-items:center; -webkit-user-drag:none;
+  border:2px solid transparent;
+  transition:transform 0.2s;
+}
+.solution-card:hover { transform:translateY(-4px); }
+.sc-red    { background:#FFF0F0; border-color:#FFB3B3; box-shadow:4px 4px 0 #FFB3B3; }
+.sc-blue   { background:#EEF7FF; border-color:#93C9FF; box-shadow:4px 4px 0 #93C9FF; }
+.sc-green  { background:#EDFFF5; border-color:#86E8A8; box-shadow:4px 4px 0 #86E8A8; }
+.sc-yellow { background:#FFFBEA; border-color:#FFE04D; box-shadow:4px 4px 0 #FFE04D; }
+.sc-purple { background:#F5EEFF; border-color:#C9A9FF; box-shadow:4px 4px 0 #C9A9FF; }
+
+.solution-card-icon { font-size:38px; margin-bottom:10px; }
+.solution-card-title { font-size:15px; font-weight:800; color:#1a1a2e; margin-bottom:6px; }
+.solution-card-desc { font-size:12.5px; color:#6b7280; line-height:1.4; }
+
+.sol-quote { text-align:center; padding:22px 28px 10px; font-size:0.78rem; color:#888; font-style:italic; }
+.sol-quote p { margin-bottom:5px; }
+
+/* ===== FITUR UNGGULAN ===== */
+.unggulan-section {
+  background: linear-gradient(160deg, #F5EEFF 0%, #FFF9E6 60%, #E8F8FF 100%);
+  padding:50px 0;
+}
+.unggulan-inner { max-width:780px; margin:auto; padding:0 28px; }
+.problem-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+@media(max-width:500px){ .problem-grid{ grid-template-columns:1fr; } }
+
+/* ===== TESTI ===== */
+.testi-section { padding:60px 16px 70px; background:#FFF9F0; }
+.testi-wrapper { max-width:780px; margin:0 auto; }
+.testi-block {
+  background:#fff; border-radius:28px; padding:28px 20px 24px;
+  border:3px solid #FFE066;
+  box-shadow:6px 6px 0px #FFD700;
+}
+.testi-header { text-align:center; margin-bottom:20px; }
+.testi-badge {
+  display:inline-block; padding:6px 16px; border-radius:30px;
+  background:#FFE066; color:#7a5a00; font-size:0.78rem; font-weight:700;
+  border:2px solid #FFD700; margin-bottom:10px;
+}
+.testi-title { font-size:1.4rem; font-weight:800; color:#1a1a2e; margin-bottom:6px; }
+.testi-title span { color:#FF6B6B; }
+.testi-sub { color:#6b7280; font-size:0.88rem; }
+
+.testi-slider-container {
+  position:relative; width:100%; overflow:hidden;
+  border-radius:18px; margin-top:18px;
+  background: linear-gradient(135deg, #FFF0F5, #F0F6FF);
+  padding:14px 0;
+  border:2px solid #FFE0F0;
+}
+.testi-track { display:flex; transition:transform 0.7s ease; }
+.testi-item { min-width:100%; padding:0 14px 6px; }
+.testi-card {
+  background:#fff; border-radius:18px; padding:18px 16px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.07); text-align:left;
+  border:2px solid #FFE8F5;
+}
+.testi-top { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+.testi-photo {
+  width:52px; height:52px; border-radius:50%; object-fit:cover;
+  border:3px solid #FFD6E8;
+  box-shadow:0 2px 10px rgba(255,107,107,0.25);
+}
+.testi-meta-name { font-weight:700; font-size:0.95rem; color:#1a1a2e; }
+.testi-meta-role { font-size:0.76rem; color:#6b7280; }
+.testi-stars { font-size:1rem; color:#FFD93D; margin-bottom:6px; letter-spacing:2px; }
+.testi-text { font-size:0.88rem; line-height:1.6; color:#374151; margin-bottom:6px; }
+.testi-footnote { font-size:0.74rem; color:#9ca3af; padding-top:6px; border-top:1px dashed #f0f0f0; }
+
+.dots { display:flex; justify-content:center; gap:8px; margin-top:16px; }
+.dot { width:10px; height:10px; border-radius:50%; background:#ddd; transition:0.3s; cursor:pointer; }
+.dot.active { background:#FF6B6B; width:24px; border-radius:5px; }
+
+/* ===== BONUS & PRICING ===== */
+.bp-section { background:#fff; padding:70px 18px 0; }
+.bp-container { max-width:780px; margin:0 auto; }
+.bp-header { text-align:center; margin-bottom:28px; }
+.bp-title { font-size:clamp(22px,3vw,32px); font-weight:900; color:#1a1a2e; margin:0 0 6px; }
+.bp-subtitle { color:#666; font-size:clamp(14px,1.8vw,16px); margin:0; }
+
+.bp-card {
+  border-radius:24px; padding:22px;
+  border:2px solid transparent;
+  margin-bottom:16px;
+  position:relative; overflow:hidden;
+}
+.bp-card-bonus {
+  background: linear-gradient(135deg, #FFFBEA 0%, #FFF0F5 100%);
+  border-color:#FFE066;
+  box-shadow:5px 5px 0 #FFD700;
+}
+.bp-card-price {
+  background: linear-gradient(135deg, #F0F6FF 0%, #F5EEFF 100%);
+  border-color:#B3D4FF;
+  box-shadow:5px 5px 0 #93C9FF;
+}
+
+.bp-badge {
+  display:inline-block; padding:5px 12px; border-radius:30px;
+  font-size:11.5px; font-weight:800; letter-spacing:.3px; margin-bottom:10px; border:2px solid transparent;
+}
+.bp-badge-green  { color:#0c5f3a; background:#D4F9E5; border-color:#86E8A8; }
+.bp-badge-orange { color:#7a3b00; background:#FFE9CC; border-color:#FFB347; }
+.bp-badge-blue   { color:#003580; background:#D6EBFF; border-color:#93C9FF; }
+
+.bp-card-title { font-size:18px; font-weight:800; color:#1a1a2e; margin:6px 0; }
+.bp-card-desc { color:#666; margin:0 0 14px; font-size:14px; }
+
+.bp-list { list-style:none; padding:0; margin:0; display:grid; gap:10px; }
+.bp-list-item {
+  display:flex; gap:12px; background:#fff; border:2px solid #FFE8CC;
+  padding:12px; border-radius:14px; align-items:center;
+}
+.bp-icon { font-size:22px; }
+.bp-muted { color:#888; font-size:12.5px; margin-top:2px; }
+.bp-value { color:#1b6b3f; font-weight:800; font-size:12.5px; margin-top:3px; }
+
+.bp-total-value {
+  margin-top:14px; padding:12px 16px; border-radius:14px;
+  background:#FFFBEA; border:2px dashed #FFD700; font-size:14px;
+  text-align:center;
+}
+.bp-free { color:#FF6B6B; font-weight:900; margin-left:6px; }
+
+.bp-bonus-wide { max-width:780px; margin:0 auto 20px; }
+
+/* BUNDLE SWITCH */
+.bp-single-pricing { max-width:520px; margin:20px auto 0; }
+.bundle-switch-box {
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  background: linear-gradient(135deg, #FFF0F5 0%, #FFE8CC 100%);
+  border:2px solid #FFB3D4; border-radius:22px;
+  padding:16px 18px; margin-bottom:16px;
+  box-shadow:4px 4px 0 #FFB3D4;
+  position:relative; overflow:hidden; transition:.25s;
+}
+.bundle-switch-box::before {
+  content:"UPGRADE HEMAT";
+  position:absolute; top:0; right:0;
+  background:linear-gradient(135deg,#FF6B6B,#FF8E53); color:#fff;
+  font-size:10px; font-weight:900;
+  padding:5px 12px; border-bottom-left-radius:14px; letter-spacing:.4px;
+}
+.bundle-switch-box.active {
+  border-color:#FF6B6B;
+  box-shadow:4px 4px 0 #FF6B6B;
+}
+.bundle-switch-main { display:flex; align-items:center; justify-content:space-between; gap:14px; width:100%; }
+.bundle-switch-title { font-size:15px; font-weight:900; color:#7A3B00; margin-bottom:4px; padding-right:95px; }
+.bundle-switch-desc { font-size:12.5px; color:#5f3b16; line-height:1.45; font-weight:600; }
+
+.switch { position:relative; display:inline-block; width:54px; height:30px; flex-shrink:0; }
+.switch input { opacity:0; width:0; height:0; }
+.slider { position:absolute; cursor:pointer; inset:0; background:#CBD5E1; transition:.25s; border-radius:999px; }
+.slider:before { position:absolute; content:""; height:22px; width:22px; left:4px; bottom:4px; background:white; transition:.25s; border-radius:50%; box-shadow:0 2px 8px rgba(0,0,0,0.18); }
+.switch input:checked + .slider { background:linear-gradient(135deg,#FF6B6B,#FF8E53); }
+.switch input:checked + .slider:before { transform:translateX(24px); }
+
+.bp-price-box {
+  text-align:center; background:#fff; border:2px solid #B3D4FF;
+  padding:14px 12px; border-radius:16px; margin-bottom:12px;
+}
+.bp-price-old { text-decoration:line-through; color:#9aa5a0; font-weight:700; font-size:14px; }
+.bp-price-now { font-size:40px; font-weight:900; color:#4D96FF; line-height:1.1; margin-top:4px; }
+.bp-price-tag { color:#888; font-size:12px; margin-top:4px; }
+.bp-checklist { list-style:none; padding:0; margin:12px 0 8px; display:grid; gap:7px; font-size:14px; }
+.bp-checklist li { background:#F0F8FF; border:1.5px solid #C0DCFF; padding:9px 12px; border-radius:10px; }
+.bp-urgency {
+  font-size:13px; color:#7a3b00; background:#FFE9CC;
+  border:2px solid #FFB347; padding:9px 12px; border-radius:12px;
+  margin:12px 0; font-weight:800;
+}
+.bp-guarantee { margin-top:12px; font-size:12px; color:#888; text-align:center; }
+
+.bp-card-price.bundle-active {
+  border-color:#FF6B6B;
+  background:linear-gradient(135deg,#FFF0F5 0%,#FFE8E0 100%);
+  box-shadow:5px 5px 0 #FF6B6B;
+}
+.bp-card-price.bundle-active .bp-price-box { border-color:#FFB3D4; }
+.bp-card-price.bundle-active .bp-price-now { color:#FF6B6B; }
+
+/* ===== FAQ ===== */
+.faq-section {
+  max-width:850px; margin:40px auto 0; padding:20px 24px 28px;
+  background: linear-gradient(135deg,#F0F6FF 0%,#F5EEFF 100%);
+  border-radius:24px; border:2px solid #C9B8FF;
+  box-shadow:5px 5px 0 #C9B8FF;
+}
+.faq-title { font-size:1.6rem; font-weight:900; text-align:center; margin-bottom:20px; color:#1a1a2e; }
+.faq-item {
+  margin-bottom:10px; border-radius:14px; overflow:hidden;
+  background:#fff; border:2px solid #E0D4FF;
+}
+.faq-question {
+  padding:14px 18px; cursor:pointer; font-weight:700; font-size:15px;
+  display:flex; justify-content:space-between; align-items:center; color:#1a1a2e;
+}
+.faq-icon { font-weight:900; font-size:20px; color:#6B4EFF; transition:.3s; }
+.faq-answer { display:none; padding:0 18px 16px; font-size:14px; color:#555; line-height:1.6; animation:fade .3s ease; }
+@keyframes fade { from{opacity:0;transform:translateY(-4px);} to{opacity:1;transform:translateY(0);} }
+
+/* ===== FOOTER ===== */
+footer {
+  background:#fff; padding:50px 20px 36px;
+  border-top:3px solid #FFE066; margin-top:50px;
+}
+.footer-logo { font-size:22px; font-weight:900; margin-bottom:20px; }
+.footer-logo span { background:linear-gradient(90deg,#FF6B6B,#FF8E53,#FFD93D,#6BCB77,#4D96FF); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.footer-links { display:flex; flex-wrap:wrap; justify-content:center; gap:16px; font-size:14px; font-weight:600; margin-bottom:24px; }
+.footer-links a { text-decoration:none; color:#4D96FF; }
+.footer-links span { color:#ddd; }
+.footer-copy { font-size:12px; color:#aaa; }
+
+/* ===== COLOR CHIPS untuk gambar hero ===== */
+.app-preview-wrap { position:relative; }
+.color-chip {
+  position:absolute; padding:8px 12px; border-radius:12px;
+  font-size:13px; font-weight:700; white-space:nowrap;
+  border:2px solid white;
+}
+.chip-a { margin-top: 20px;background:#FF6B6B; color:white; top:10px; right:-20px; box-shadow:3px 3px 0 rgba(255,107,107,0.4); transform:rotate(5deg); }
+.chip-b { margin-top: 10px;background:#4D96FF; color:white; bottom:10px; left:-20px; box-shadow:3px 3px 0 rgba(77,150,255,0.4); transform:rotate(-4deg); }
+.chip-c { margin-top: 18px;background:#FFD93D; color:#7a5a00; top:50%; left:-25px; box-shadow:3px 3px 0 rgba(255,217,61,0.5); transform:rotate(6deg) translateY(-50%); }
+whatsapp {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 9999;
+}
+.Whatsapp {
+  width: 40px;
+  height:40px;
+}
+@media (max-width:480px) { 
+  whatsapp {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 9999;
+  } 
+  .Whatsapp {
+    width: 25px;
+    height:25px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header style="position: fixed;z-index: 999;margin-top: -30px;">
+  <div class="logo">
+    <span class="logo-icon"><svg style="width: 25px;height:25px;position:relative;top:5px;left:6px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 19V6.2C4 5.0799 4 4.51984 4.21799 4.09202C4.40973 3.71569 4.71569 3.40973 5.09202 3.21799C5.51984 3 6.0799 3 7.2 3H16.8C17.9201 3 18.4802 3 18.908 3.21799C19.2843 3.40973 19.5903 3.71569 19.782 4.09202C20 4.51984 20 5.0799 20 6.2V17H6C4.89543 17 4 17.8954 4 19ZM4 19C4 20.1046 4.89543 21 6 21H20M9 7H15M9 11H15M19 17V21" stroke="#22A5FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></span>
+    <span>MyCalistung</span>
+  </div>
+  <a href="#harga" class="btn-top">Coba Sekarang ✨</a>
+</header>
+<whatsapp>
+  <a id="WA" target="_blank" href="https://api.whatsapp.com/send/?phone=6285169621898&text=Halo+Saya+ingin+memesan+paket+MyCalistung&app_absent=0" style="position:relative;">
+    <svg class="Whatsapp" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#00ff40" stroke="#00ff40"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>whatsapp [#128]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-300.000000, -7599.000000)" fill="#04fb14"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M259.821,7453.12124 C259.58,7453.80344 258.622,7454.36761 257.858,7454.53266 C257.335,7454.64369 256.653,7454.73172 254.355,7453.77943 C251.774,7452.71011 248.19,7448.90097 248.19,7446.36621 C248.19,7445.07582 248.934,7443.57337 250.235,7443.57337 C250.861,7443.57337 250.999,7443.58538 251.205,7444.07952 C251.446,7444.6617 252.034,7446.09613 252.104,7446.24317 C252.393,7446.84635 251.81,7447.19946 251.387,7447.72462 C251.252,7447.88266 251.099,7448.05372 251.27,7448.3478 C251.44,7448.63589 252.028,7449.59418 252.892,7450.36341 C254.008,7451.35771 254.913,7451.6748 255.237,7451.80984 C255.478,7451.90987 255.766,7451.88687 255.942,7451.69881 C256.165,7451.45774 256.442,7451.05762 256.724,7450.6635 C256.923,7450.38141 257.176,7450.3464 257.441,7450.44643 C257.62,7450.50845 259.895,7451.56477 259.991,7451.73382 C260.062,7451.85686 260.062,7452.43903 259.821,7453.12124 M254.002,7439 L253.997,7439 L253.997,7439 C248.484,7439 244,7443.48535 244,7449 C244,7451.18666 244.705,7453.21526 245.904,7454.86076 L244.658,7458.57687 L248.501,7457.3485 C250.082,7458.39482 251.969,7459 254.002,7459 C259.515,7459 264,7454.51465 264,7449 C264,7443.48535 259.515,7439 254.002,7439" id="whatsapp-[#128]"> </path> </g> </g> </g> </g></svg></a>
+</whatsapp>
+<!-- HERO -->
+<section class="hero" style="margin-top: 30px;">
+  <div class="hero-text">
+    <div class="badge">🏆 #1 Aplikasi Calistung Anak Indonesia</div>
+
+    <h1>
+      <span class="c1">Baca</span>,
+      <span class="c2">Tulis</span> &amp;
+      <span class="c3">Hitung</span>
+      Jadi <span class="c4">Seru!</span>
+    </h1>
+
+    <p class="desc">
+      Cara baru anak belajar huruf, angka, menulis, dan matematika dasar — dengan bermain interaktif yang bikin mereka nagih belajar setiap hari!
+    </p>
+
+    <div class="hero-img">
+      <div class="app-preview-wrap">
+        <div class="hero-card">
+          <div style="font-size:90px; margin-bottom:10px; line-height:1;">📚</div>
+          <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:10px;">
+            <span style="background:#FF6B6B;color:#fff;padding:6px 12px;border-radius:10px;font-weight:700;font-size:13px;">A B C</span>
+            <span style="background:#4D96FF;color:#fff;padding:6px 12px;border-radius:10px;font-weight:700;font-size:13px;">1 2 3</span>
+            <span style="background:#6BCB77;color:#fff;padding:6px 12px;border-radius:10px;font-weight:700;font-size:13px;">✍️</span>
+            <span style="background:#FFD93D;color:#7a5a00;padding:6px 12px;border-radius:10px;font-weight:700;font-size:13px;">🎮</span>
+          </div>
+          <div style="background:#F5EEFF;border-radius:12px;padding:10px;border:2px solid #C9A9FF;font-size:12px;color:#6B4EFF;font-weight:600;">⭐ Belajar sambil bermain!</div>
+        </div>
+        <div class="chip-a">🔤 Huruf A–Z</div>
+        <div class="chip-b">🔢 Belajar Angka</div>
+        <div class="chip-c">✏️ Menulis</div>
+      </div>
+      <img class="floating-icon" style="top:-30px;right:-20px;animation-delay:0s;" src="https://cdn-icons-png.flaticon.com/512/3132/3132733.png" alt="">
+      <img class="floating-icon" style="bottom:-30px;right:-10px;animation-delay:0.6s;" src="https://cdn-icons-png.flaticon.com/512/2583/2583346.png" alt="">
+      <img class="floating-icon" style="top:40%;left:-25px;animation-delay:1.2s;" src="https://cdn-icons-png.flaticon.com/512/2436/2436636.png" alt="">
+    </div>
+
+    <div class="hero-buttons">
+      <a href="#harga" class="btn-primary">🎯 Lihat Pilihan Paket</a>
+    </div>
+    <p class="desc2">"Awalnya mogok belajar — sekarang malah dia yang minta sendiri!" 😊</p>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<div class="section-wrapper">
+  <h2 class="section-title">Apakah Ini Terjadi? 🥺</h2>
+  <p class="subtitle">Masalah yang paling sering dihadapi orang tua saat mengajari anak belajar calistung:</p>
+
+  <div class="problem-card pc-red">
+    <div class="problem-icon pi-red">😔</div>
+    <div>
+      <div class="problem-text-title">Anak cepat bosan belajar huruf & angka</div>
+      <div class="problem-text-sub">Belum 5 menit duduk, sudah minta main HP atau nonton YouTube.</div>
+    </div>
+  </div>
+
+  <div class="problem-card pc-blue">
+    <div class="problem-icon pi-blue">📱</div>
+    <div>
+      <div class="problem-text-title">Lebih suka main HP daripada belajar</div>
+      <div class="problem-text-sub">Konten tidak terkontrol, sering tidak sesuai usia anak.</div>
+    </div>
+  </div>
+
+  <div class="problem-card pc-yellow">
+    <div class="problem-icon pi-yellow">⏰</div>
+    <div>
+      <div class="problem-text-title">Orang tua sibuk, tidak bisa dampingi terus</div>
+      <div class="problem-text-sub">Pekerjaan & rumah menumpuk — belajar anak jadi tidak konsisten.</div>
+    </div>
+  </div>
+
+  <div class="problem-card pc-purple">
+    <div class="problem-icon pi-purple">🔄</div>
+    <div>
+      <div class="problem-text-title">Hari ini hafal, besok lupa lagi</div>
+      <div class="problem-text-sub">Tidak ada pengulangan otomatis, belajar tidak terstruktur.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SOLUTION -->
+<div class="solution-wrapper">
+  <div class="solution-inner">
+    <div class="solution-box">
+      <h2 class="solution-title">Say Hello to <span class="hl">MyCalistung!</span> 🔤</h2>
+      <p class="solution-sub">Cara Baru Agar Anak Semangat Belajar Baca, Tulis & Hitung Setiap Hari</p>
+    </div>
+
+    <div class="solution-cards">
+      <div class="solution-card sc-red">
+        <div class="solution-card-icon">🔤</div>
+        <div class="solution-card-title">Huruf A–Z Interaktif</div>
+        <div class="solution-card-desc">Ketuk huruf, langsung dengar suara & lihat gambarnya.</div>
+      </div>
+      <div class="solution-card sc-blue">
+        <div class="solution-card-icon">🔢</div>
+        <div class="solution-card-title">Angka & Berhitung</div>
+        <div class="solution-card-desc">Mengenal angka 1–100 dengan cara yang menyenangkan.</div>
+      </div>
+      <div class="solution-card sc-green" onclick="window.location.href='">
+        <div class="solution-card-icon">🧮</div>
+        <div class="solution-card-title">Matematika Dasar</div>
+        <div class="solution-card-desc">Belajar penjumlahan & pengurangan dengan visual menarik.</div>
+      </div>
+      <div class="solution-card sc-yellow">
+        <div class="solution-card-icon">✍️</div>
+        <div class="solution-card-title">Latihan Menulis</div>
+        <div class="solution-card-desc">Ikuti panduan menulis huruf & angka step by step.</div>
+      </div>
+      <div class="solution-card sc-purple">
+        <div class="solution-card-icon">🎮</div>
+        <div class="solution-card-title">Game Edukasi</div>
+        <div class="solution-card-desc">Belajar sambil bermain, anak betah & tidak bosan.</div>
+      </div>
+    </div>
+
+    <div class="sol-quote">
+      <p>✨ "Hanya dalam 7 hari, anak sudah bisa menulis namanya sendiri."</p>
+      <p>🎵 "Belajar 5 menit sehari dengan suara & gambar interaktif."</p>
+    </div>
+  </div>
+</div>
+
+<!-- FITUR UNGGULAN -->
+<div class="unggulan-section">
+  <div class="unggulan-inner">
+    <h2 class="section-title">Fitur Unggulan ⭐</h2>
+    <p class="subtitle">Semua fitur dibuat agar belajar calistung lebih efektif dan menyenangkan.</p>
+
+    <div class="problem-grid">
+      <div class="problem-card pc-red" style="margin-bottom:0;">
+        <div class="problem-icon pi-red">🔊</div>
+        <div>
+          <div class="problem-text-title">Audio Huruf Interaktif</div>
+          <div class="problem-text-sub">Ketuk huruf, langsung dengar pelafalan yang benar.</div>
+        </div>
+      </div>
+      <div class="problem-card pc-blue" style="margin-bottom:0;">
+        <div class="problem-icon pi-blue">📝</div>
+        <div>
+          <div class="problem-text-title">Latihan Menulis</div>
+          <div class="problem-text-sub">Panduan menulis huruf & angka step by step.</div>
+        </div>
+      </div>
+      <div class="problem-card pc-yellow" style="margin-bottom:0;">
+        <div class="problem-icon pi-yellow">🎮</div>
+        <div>
+          <div class="problem-text-title">Game Edukasi Anak</div>
+          <div class="problem-text-sub">Belajar sambil main game yang seru & edukatif.</div>
+        </div>
+      </div>
+      <div class="problem-card pc-purple" style="margin-bottom:0;">
+        <div class="problem-icon pi-purple">📊</div>
+        <div>
+          <div class="problem-text-title">Progress Orang Tua</div>
+          <div class="problem-text-sub">Pantau perkembangan belajar anak setiap hari.</div>
+        </div>
+      </div>
+      <div class="problem-card pc-red" style="margin-bottom:0;">
+        <div class="problem-icon pi-red">🛡️</div>
+        <div>
+          <div class="problem-text-title">100% Tanpa Iklan</div>
+          <div class="problem-text-sub">Aman untuk anak, tanpa konten yang tidak pantas.</div>
+        </div>
+      </div>
+      <div class="problem-card pc-blue" style="margin-bottom:0;">
+        <div class="problem-icon pi-blue">➕</div>
+        <div>
+          <div class="problem-text-title">Matematika Lengkap</div>
+          <div class="problem-text-sub">Dari mengenal angka hingga penjumlahan & pengurangan.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="max-width:780px;margin:40px auto;padding:0 20px;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;">
+    
+    <div class="problem-card pc-red" style="text-align:center;">
+      <div>
+        <div style="font-size:30px;font-weight:900;color:#FF6B6B;">5.000+</div>
+        <div class="problem-text-sub">Anak Sudah Belajar</div>
+      </div>
+    </div>
+
+    <div class="problem-card pc-blue" style="text-align:center;">
+      <div>
+        <div style="font-size:30px;font-weight:900;color:#4D96FF;">4.8★</div>
+        <div class="problem-text-sub">Rating Orang Tua</div>
+      </div>
+    </div>
+
+    <div class="problem-card pc-yellow" style="text-align:center;">
+      <div>
+        <div style="font-size:30px;font-weight:900;color:#D4A000;">95%</div>
+        <div class="problem-text-sub">Anak Lebih Semangat</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- TESTIMONI -->
+<section class="testi-section">
+  <div class="testi-wrapper">
+    <div class="testi-block">
+      <div class="testi-header">
+        <div class="testi-badge">⭐ Apa Kata Mereka?</div>
+        <h2 class="testi-title">Orang Tua yang Sudah Coba <span>MyCalistung</span> 👇</h2>
+        <p class="testi-sub">Bukan cuma anak yang semangat belajar, orang tua juga tenang karena belajar jadi terarah.</p>
+      </div>
+
+      <div class="testi-slider-container" id="testiSliderContainer">
+        <div class="testi-track" id="testiTrack">
+
+          <div class="testi-item">
+            <div class="testi-card">
+              <div class="testi-top">
+                <img src="https://cdn-icons-png.flaticon.com/512/4140/4140037.png" class="testi-photo" alt="">
+                <div>
+                  <div class="testi-meta-name">Bunda Sari</div>
+                  <div class="testi-meta-role">Ibu Rumah Tangga — Anak 4 tahun</div>
+                </div>
+              </div>
+              <div class="testi-stars">★★★★★</div>
+              <p class="testi-text">"Sebelum pakai <b>MyCalistung</b>, anak saya belum bisa bedain huruf <b>B dan D</b>. Setelah beberapa hari, dia mulai bisa nyebut satu-satu sambil pencet huruf di layar. Katanya kayak <b>main game</b> padahal lagi belajar!"</p>
+              <p class="testi-footnote">✨ Cocok untuk anak yang baru mulai mengenal huruf.</p>
+            </div>
+          </div>
+
+          <div class="testi-item">
+            <div class="testi-card">
+              <div class="testi-top">
+                <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" class="testi-photo" alt="">
+                <div>
+                  <div class="testi-meta-name">Bunda Rina</div>
+                  <div class="testi-meta-role">Ibu Rumah Tangga — Anak 6 tahun</div>
+                </div>
+              </div>
+              <div class="testi-stars">★★★★★</div>
+              <p class="testi-text">"Alhamdulillah, sejak pakai <b>MyCalistung</b> anak saya jadi sering minta <b>belajar sendiri</b>. Dulu susah banget diajak duduk belajar, sekarang malah dia yang ingatkan saya buka aplikasinya."</p>
+              <p class="testi-footnote">🌟 Dipakai rutin 4–5x seminggu, perkembangan makin terlihat.</p>
+            </div>
+          </div>
+
+          <div class="testi-item">
+            <div class="testi-card">
+              <div class="testi-top">
+                <img src="https://cdn-icons-png.flaticon.com/512/4140/4140061.png" class="testi-photo" alt="">
+                <div>
+                  <div class="testi-meta-name">Mom Kirana</div>
+                  <div class="testi-meta-role">Ibu 2 Anak — TK & SD kelas 1</div>
+                </div>
+              </div>
+              <div class="testi-stars">★★★★★</div>
+              <p class="testi-text">"Fitur <b>audio huruf</b> sangat membantu. Anak-anak bisa ulang sendiri tanpa nunggu saya. Screen time tetap ada, tapi sekarang isinya <b>belajar baca & hitung</b>, bukan video yang tidak jelas."</p>
+              <p class="testi-footnote">🎵 Suka fitur: audio interaktif & laporan progres orang tua.</p>
+            </div>
+          </div>
+
+          <div class="testi-item">
+            <div class="testi-card">
+              <div class="testi-top">
+                <img src="https://cdn-icons-png.flaticon.com/512/4140/4140077.png" class="testi-photo" alt="">
+                <div>
+                  <div class="testi-meta-name">Bu Dewi</div>
+                  <div class="testi-meta-role">Guru TK — 15 murid usia 4–5 tahun</div>
+                </div>
+              </div>
+              <div class="testi-stars">★★★★★</div>
+              <p class="testi-text">"Saya pakai MyCalistung di kelas sebagai <b>media belajar tambahan</b>. Anak-anak cepat hafal karena tampilannya lucu, warna-warni, dan tiap huruf bisa ditekan ada suaranya. Orang tua bisa lanjutkan di rumah."</p>
+              <p class="testi-footnote">🏫 Membantu menyatukan metode belajar guru & orang tua.</p>
+            </div>
+          </div>
+
+          <div class="testi-item">
+            <div class="testi-card">
+              <div class="testi-top">
+                <img src="https://cdn-icons-png.flaticon.com/512/4140/4140089.png" class="testi-photo" alt="">
+                <div>
+                  <div class="testi-meta-name">Bunda Hana</div>
+                  <div class="testi-meta-role">Karyawan — Anak 5 tahun aktif</div>
+                </div>
+              </div>
+              <div class="testi-stars">★★★★★</div>
+              <p class="testi-text">"Karena saya bekerja, waktu ngajarin calistung terbatas. Dengan MyCalistung, anak saya tetap bisa belajar sendiri, lalu malamnya tinggal saya <b>cek progres dan dengarkan hafalannya</b>. Sangat membantu!"</p>
+              <p class="testi-footnote">💼 Cocok untuk jadwal orang tua yang padat.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="dots" id="dots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- BONUS & PRICING -->
+<section id="bonus-pricing" class="bp-section">
+  <div class="bp-container" id="harga">
+
+    <div class="bp-header">
+      <h2 class="bp-title">🎉 Promo MyCalistung</h2>
+      <p class="bp-subtitle">Akses seumur hidup + bonus eksklusif khusus pembeli hari ini.</p>
+    </div>
+    
+    <div class="bp-card bp-card-bonus bp-bonus-wide">
+      <div class="bp-badge bp-badge-orange">🎁 BONUS KHUSUS HARI INI</div>
+      <h3 class="bp-card-title">Bonus Eksklusif untuk Bunda & Ayah 💛</h3>
+      <p class="bp-card-desc">Setiap pembelian paket hari ini, Anda mendapatkan 3 bonus yang <b>tidak dijual terpisah</b>.</p>
+      <ul class="bp-list" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr));">
+        <li class="bp-list-item"><span class="bp-icon">🎁</span><div><b>100 Cerita Anak Edukatif</b><div class="bp-muted">Nilai: Rp129.000</div></div></li>
+        <li class="bp-list-item"><span class="bp-icon">🎁</span><div><b>Flashcard Huruf & Angka</b><div class="bp-muted">Nilai: Rp40.000</div></div></li>
+        <li class="bp-list-item"><span class="bp-icon">🎁</span><div><b>Buku Mewarnai Anak</b><div class="bp-muted">Nilai: Rp60.000</div></div></li>
+      </ul>
+      <div class="bp-total-value">Total nilai bonus: <b>Rp229.000</b><span class="bp-free">GRATIS!</span></div>
+    </div>
+    <div class="bp-single-pricing">
+
+      <div class="bundle-switch-box" id="bundleSwitchBox">
+        <div class="bundle-switch-main">
+          <div>
+            <div class="bundle-switch-title">🔥 Mau sekalian paket lengkap?</div>
+            <div class="bundle-switch-desc">Aktifkan bundling, dapatkan MyCalistung + MyEnglishKids lebih hemat.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="bundleToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:15px;margin-bottom: 10px;">
+      <div style="background:#EDFFF5;padding:8px 14px;border-radius:20px;font-size:13px;font-weight:700;">🔒 Pembayaran Aman</div>
+
+      <div style="background:#F0F6FF;padding:8px 14px;border-radius:20px;font-size:13px;font-weight:700;">🛡️ Garansi 30 Hari</div>
+
+      <div style="background:#FFFBEA;padding:8px 14px;border-radius:20px;font-size:13px;font-weight:700;">⚡ Akses Instan</div>
+      </div>
+      <div class="bp-card bp-card-price" id="pricingCard">
+        <div class="bp-badge bp-badge-green" id="packageBadge">PAKET REGULER</div>
+        <h3 class="bp-card-title" id="packageTitle">MyCalistung 2 Bulan</h3>
+        <p class="bp-card-desc" id="packageDesc">Akses penuh aplikasi MyCalistung seumur hidup.</p>
+
+        <div class="bp-price-box">
+          <div class="bp-price-old" id="oldPrice">Rp 150.000</div>
+          <div class="bp-price-now" id="nowPrice">Rp 99.000</div>
+          <div class="bp-price-tag" id="priceTag">✅ Lest 2 Bulan</div>
+        </div>
+
+        <ul class="bp-checklist" id="packageChecklist">
+          <li>✅ Akses MyCalistung 2 Bulan</li>
+          <li>✅ Semua 3 Bonus Eksklusif</li>
+          <li>✅ Free Update Konten</li>
+        </ul>
+
+        <div class="bp-urgency">⏰ Harga promo terbatas! Jangan sampai ketinggalan.</div>
+
+        <a href="payment.php" id="checkoutLink" style="text-decoration:none;display:block;margin-top:16px;">
+          <div id="checkoutButton" style="text-align:center;padding:16px;border-radius:16px;color:#fff;font-weight:800;font-size:16px;cursor:pointer;background:linear-gradient(135deg,#FF6B6B,#FF8E53);box-shadow:0 6px 20px rgba(255,107,107,0.4);">
+            🎯 Ambil Paket Reguler
+          </div>
+        </a>
+      </div>
+
+    </div>
+    <p class="bp-guarantee">🛡️ Garansi uang kembali 7 hari & akses aman untuk buah hati bunda.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <h2 class="faq-title">❓ Pertanyaan yang Sering Ditanyakan</h2>
+
+  <div class="faq-item">
+    <div class="faq-question">🤔 Apa itu MyCalistung? <span class="faq-icon">+</span></div>
+    <div class="faq-answer">MyCalistung adalah aplikasi belajar baca, tulis, dan hitung anak yang interaktif. Bukan sekadar e-book — anak benar-benar belajar dengan suara, game, dan latihan yang terus diperbarui.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-question">🤔 Cocok untuk umur berapa? <span class="faq-icon">+</span></div>
+    <div class="faq-answer">MyCalistung cocok untuk anak usia <b>3–8 tahun</b>, dari yang belum mengenal huruf hingga yang sudah mulai membaca kalimat.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-question">🤔 Apakah MyCalistung aman? <span class="faq-icon">+</span></div>
+    <div class="faq-answer">Ya! Tanpa iklan, tanpa YouTube, dan semua materinya <b>100% khusus edukasi anak</b>. Aman dipakai tanpa pengawasan terus-menerus.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-question">🤔 Bisa dipakai di beberapa perangkat? <span class="faq-icon">+</span></div>
+    <div class="faq-answer">Bisa! Satu akun dapat digunakan di <b>3 perangkat</b> berbeda — HP, tablet, atau laptop.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-question">🤔 Apakah ada biaya tambahan? <span class="faq-icon">+</span></div>
+    <div class="faq-answer">Tidak ada. Pembeli hari ini hanya bayar sekali dan mendapatkan <b>akses seumur hidup</b> termasuk semua update konten ke depannya.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-question">🤔 Anak yang belum bisa membaca bisa pakai? <span class="faq-icon">+</span></div>
+    <div class="faq-answer">Tentu! Cukup <b>tap & dengar</b> — anak belajar sambil bermain dengan panduan audio interaktif. Tidak perlu bisa baca dulu!</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="max-width:780px;margin:0 auto;text-align:center;">
+    <div class="footer-logo"><span><svg style="width: 25px;height:25px;position:relative;top:5px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 19V6.2C4 5.0799 4 4.51984 4.21799 4.09202C4.40973 3.71569 4.71569 3.40973 5.09202 3.21799C5.51984 3 6.0799 3 7.2 3H16.8C17.9201 3 18.4802 3 18.908 3.21799C19.2843 3.40973 19.5903 3.71569 19.782 4.09202C20 4.51984 20 5.0799 20 6.2V17H6C4.89543 17 4 17.8954 4 19ZM4 19C4 20.1046 4.89543 21 6 21H20M9 7H15M9 11H15M19 17V21" stroke="#22A5FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg> MyCalistung</span></div>
+    <div class="footer-links">
+      <a href="#harga">Harga</a><span>|</span>
+      <a href="#faq">FAQ</a><span>|</span>
+      <a href="terms.php">Syarat & Ketentuan</a><span>|</span>
+      <a href="policy.php">Kebijakan</a>
+    </div>
+    <div class="footer-copy">© 2026 MyCalistung. All rights reserved. 💛</div>
+  </div>
+</footer>
+
+<script>
+/* DRAG SCROLL - Solution */
+document.addEventListener("DOMContentLoaded", function(){
+  const slider = document.querySelector(".solution-cards");
+  if(!slider) return;
+  let isDrag=false, sx=0, ss=0;
+  slider.addEventListener("mousedown",(e)=>{isDrag=true;slider.style.cursor="grabbing";sx=e.pageX-slider.offsetLeft;ss=slider.scrollLeft;});
+  document.addEventListener("mouseup",()=>{isDrag=false;slider.style.cursor="grab";});
+  slider.addEventListener("mouseleave",()=>{isDrag=false;});
+  slider.addEventListener("mousemove",(e)=>{if(!isDrag)return;e.preventDefault();const x=e.pageX-slider.offsetLeft;slider.scrollLeft=ss-(x-sx);});
+  slider.addEventListener("touchstart",(e)=>{sx=e.touches[0].pageX;ss=slider.scrollLeft;});
+  slider.addEventListener("touchmove",(e)=>{slider.scrollLeft=ss-(e.touches[0].pageX-sx);});
+});
+
+/* TESTI SLIDER */
+const track=document.getElementById("testiTrack");
+const container=document.getElementById("testiSliderContainer");
+const dotsEl=document.getElementById("dots");
+const slides=document.querySelectorAll(".testi-item");
+const N=slides.length;
+let idx=0,startX=0,dragging=false,timer;
+
+for(let i=0;i<N;i++){
+  const d=document.createElement("div"); d.className="dot";
+  if(i===0)d.classList.add("active");
+  d.onclick=()=>go(i);
+  dotsEl.appendChild(d);
+}
+const dots=document.querySelectorAll(".dot");
+
+function go(n){idx=(n+N)%N;track.style.transform=`translateX(-${idx*100}%)`;dots.forEach((d,i)=>d.classList.toggle("active",i===idx));}
+function next(){go(idx+1);}
+function startAuto(){timer=setInterval(next,3500);}
+function stopAuto(){clearInterval(timer);}
+
+container.addEventListener("touchstart",(e)=>{stopAuto();dragging=true;startX=e.touches[0].clientX;});
+container.addEventListener("touchend",(e)=>{if(!dragging)return;const diff=e.changedTouches[0].clientX-startX;if(Math.abs(diff)>50)go(diff<0?idx+1:idx-1);dragging=false;startAuto();});
+container.addEventListener("mousedown",(e)=>{stopAuto();dragging=true;startX=e.clientX;});
+container.addEventListener("mouseup",(e)=>{if(!dragging)return;const diff=e.clientX-startX;if(Math.abs(diff)>50)go(diff<0?idx+1:idx-1);dragging=false;startAuto();});
+container.addEventListener("mouseleave",()=>{if(dragging){dragging=false;startAuto();}});
+startAuto();
+
+/* FAQ */
+document.querySelectorAll(".faq-question").forEach(q=>{
+  q.addEventListener("click",()=>{
+    const a=q.nextElementSibling, ic=q.querySelector(".faq-icon");
+    document.querySelectorAll(".faq-answer").forEach(x=>{if(x!==a)x.style.display="none";});
+    document.querySelectorAll(".faq-icon").forEach(x=>{if(x!==ic)x.textContent="+";});
+    if(a.style.display==="block"){a.style.display="none";ic.textContent="+";}
+    else{a.style.display="block";ic.textContent="-";}
+  });
+});
+
+/* BUNDLE TOGGLE */
+const toggle=document.getElementById("bundleToggle");
+const switchBox=document.getElementById("bundleSwitchBox");
+const card=document.getElementById("pricingCard");
+const badge=document.getElementById("packageBadge");
+const title=document.getElementById("packageTitle");
+const desc2=document.getElementById("packageDesc");
+const oldP=document.getElementById("oldPrice");
+const nowP=document.getElementById("nowPrice");
+const tag=document.getElementById("priceTag");
+const list=document.getElementById("packageChecklist");
+const link=document.getElementById("checkoutLink");
+const btn=document.getElementById("checkoutButton");
+
+const reguler={badge:"PAKET REGULER",title:"MyCalistung 2 Bulan",desc:"Akses penuh aplikasi MyCalistung seumur hidup.",old:"Rp 150.000",now:"Rp 99.000",tag:"✅ Sekali bayar, akses seumur hidup",list:`<li>✅ Akses MyCalistung 2 Bulan</li><li>✅ Semua 3 Bonus Eksklusif</li><li>✅ Free Update Konten</li>`,link:"payment.php",btn:"🎯 Ambil Paket Reguler",isBundle:false};
+const bundle={badge:"PAKET BUNDLING",title:"MyCalistung + MyEnglishKids",desc:"Dua aplikasi edukasi terbaik dalam satu paket hemat!",old:"Rp 370.000",now:"Rp 170.000",tag:"🔥 Lebih Hemat Rp 779.000!",list:`<li>✅ Akses MyCalistung 2 Bulan</li><li>✅ Akses MyEnglishKids 2 Bulan</li><li>✅ Semua 3 Bonus Eksklusif</li><li>⭐ Prioritas Support</li>`,link:"payment.php?bundle=1",btn:"🎯 Ambil Paket Bundling",isBundle:true};
+
+function setPricing(p){
+  badge.textContent=p.badge; title.textContent=p.title; desc2.textContent=p.desc;
+  oldP.textContent=p.old; nowP.textContent=p.now; tag.textContent=p.tag;
+  list.innerHTML=p.list; link.href=p.link; btn.textContent=p.btn;
+  if(p.isBundle){
+    switchBox.classList.add("active"); card.classList.add("bundle-active");
+    badge.className="bp-badge bp-badge-orange";
+    btn.style.background="linear-gradient(135deg,#FF6B6B,#FF8E53)";
+  } else {
+    switchBox.classList.remove("active"); card.classList.remove("bundle-active");
+    badge.className="bp-badge bp-badge-green";
+    btn.style.background="linear-gradient(135deg,#4D96FF,#6BBAFF)";
+  }
+}
+
+toggle.addEventListener("change",function(){setPricing(this.checked?bundle:reguler);});
+setPricing(reguler);
+window.addEventListener("pageshow",()=>setPricing(toggle.checked?bundle:reguler));
+</script>
+
+</body>
+</html>
